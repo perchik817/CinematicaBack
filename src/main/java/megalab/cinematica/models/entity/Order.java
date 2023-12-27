@@ -1,4 +1,4 @@
-package megalab.cinematica.models;
+package megalab.cinematica.models.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

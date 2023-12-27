@@ -1,4 +1,4 @@
-package megalab.cinematica.models;
+package megalab.cinematica.models.entity;
 
 
 import lombok.AccessLevel;
@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import megalab.cinematica.base.BaseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -20,6 +21,9 @@ public class Cinema extends BaseEntity {
     @Id
     @GeneratedValue (strategy = GenerationType.SEQUENCE)
     Long id;
-    String logo;
+    MultipartFile logo;
+    @Column(unique = true)
     String name;
+    String definition;
+    String address;
 }

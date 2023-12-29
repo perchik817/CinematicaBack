@@ -25,7 +25,7 @@ public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaRep, Cinema
     public CinemaDto create(CinemaCreateRequest request) {
         //TODO add logo
         CinemaDto cinemaDto = new CinemaDto();
-        cinemaDto.setLogo();
+        //cinemaDto.setLogo();
         cinemaDto.setName(request.getName());
         cinemaDto.setDefinition(request.getDefinition());
         cinemaDto.setAddress(request.getAddress());

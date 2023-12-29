@@ -24,7 +24,7 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
     public FilmDto create(FilmCreateRequest request) {
         //TODO add logo
         FilmDto filmDto = new FilmDto();
-        filmDto.setLogo();
+        //filmDto.setLogo();
         filmDto.setName(request.getName());
         filmDto.setDefinition(request.getDefinition());
         filmDto.setGenre(request.getGenre());

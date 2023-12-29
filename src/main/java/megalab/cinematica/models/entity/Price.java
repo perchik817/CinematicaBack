@@ -6,8 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import megalab.cinematica.base.BaseEntity;
-import megalab.cinematica.models.enums.Genre;
-import org.springframework.web.multipart.MultipartFile;
+import megalab.cinematica.models.enums.Ticket;
 
 import javax.persistence.*;
 
@@ -15,16 +14,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "tb_films")
+@Table(name = "tb_price")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Film extends BaseEntity {
+public class Price extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     Long id;
-    String name;
-    MultipartFile logo;
-    String definition;
+    double price;
     @Enumerated(EnumType.STRING)
-    Genre genre;
-    String format;
+    Ticket type;
 }

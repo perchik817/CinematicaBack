@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderServiceImpl extends BaseServiceImpl<Order, OrderRep, OrderDto, OrderMapper> implements OrderService {
 
-    protected OrderServiceImpl(OrderRep orderRep, OrderMapper mapper) {
-        super(orderRep, mapper);
+    protected OrderServiceImpl(OrderRep repo, OrderMapper mapper) {
+        super(repo, mapper);
     }
 
     @Override

@@ -11,35 +11,35 @@ import java.util.List;
 
 @MappedSuperclass
 public abstract class BaseServiceImpl<E extends BaseEntity, R extends BaseRep<E>, D extends BaseDto, M extends BaseMapper<E, D>> implements BaseService<D> {
-    protected final R r;
+    protected final R repo;
     protected final M mapper;
     @Autowired
     protected CycleAvoidingMappingContext context;
 
-    protected BaseServiceImpl(R r, M mapper) {
-        this.r = r;
+    protected BaseServiceImpl(R repo, M mapper) {
+        this.repo = repo;
         this.mapper = mapper;
     }
 
 
     @Override
     public D save(D d) {
-        return mapper.toDto(r.save(mapper.toEntity(d, context)), context);
+        return mapper.toDto(repo.save(mapper.toEntity(d, context)), context);
     }
 
     @Override
     public D findById(Long id, Language lang) {
-        return mapper.toDto(r.findById(id).orElseThrow(()-> new FindByIdException(ResourceBundle.periodMess("idNotFound", lang))), context);
+        return mapper.toDto(repo.findById(id).orElseThrow(()-> new FindByIdException(ResourceBundle.periodMess("idNotFound", lang))), context);
     }
 
     @Override
     public List<D> findAll() {
-        return mapper.toDtos(r.findAll(), context);
+        return mapper.toDtos(repo.findAll(), context);
     }
 
     @Override
     public D update(D d) {
-        return mapper.toDto(r.saveAndFlush(mapper.toEntity(d, context)), context);
+        return mapper.toDto(repo.saveAndFlush(mapper.toEntity(d, context)), context);
     }
 
     @Override

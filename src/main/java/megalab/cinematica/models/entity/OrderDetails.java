@@ -6,25 +6,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import megalab.cinematica.base.BaseEntity;
-import megalab.cinematica.models.enums.Genre;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
-@Table(name = "tb_films")
+@Table(name = "tb_order_details")
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Film extends BaseEntity {
+public class OrderDetails extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
-    String name;
-    MultipartFile logo;
-    String definition;
-    @Enumerated(EnumType.STRING)
-    Genre genre;
-    String format;
+    @ManyToOne
+    @JoinColumn(name = "id_order")
+    Order order;
+    @ManyToOne
+    @JoinColumn(name = "id_session")
+    Session session;
+    @ManyToOne
+    @JoinColumn(name = "id_seats")
+    Seats seats;
+    double price;
+    int num;
 }

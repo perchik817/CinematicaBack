@@ -7,7 +7,9 @@ import megalab.cinematica.models.dto.SessionDto;
 import megalab.cinematica.models.entity.Session;
 import megalab.cinematica.models.requests.SessionCreateRequest;
 import megalab.cinematica.service.SessionService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SessionServiceImpl extends BaseServiceImpl<Session, SessionRep, SessionDto, SessionMapper> implements SessionService {
     protected SessionServiceImpl(SessionRep repo, SessionMapper mapper) {
         super(repo, mapper);

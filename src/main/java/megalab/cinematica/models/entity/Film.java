@@ -10,6 +10,7 @@ import megalab.cinematica.models.enums.Genre;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.time.Duration;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +28,5 @@ public class Film extends BaseEntity {
     @Enumerated(EnumType.STRING)
     Genre genre;
     String format;
+    Duration duration;
 }

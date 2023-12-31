@@ -1,16 +1,16 @@
 package megalab.cinematica.models.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import megalab.cinematica.base.BaseDto;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderDetailsDto extends BaseDto {
+    Long id;
     OrderDto orderDto;
     SessionDto sessionDto;
     SeatsDto seatsDto;

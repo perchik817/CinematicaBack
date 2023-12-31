@@ -16,8 +16,11 @@ public class Hall extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
-    @ManyToOne
-    @JoinColumn(name = "id_cinema")
+    @Column(unique = true, nullable = false)
+    String name;
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cinema", nullable = false)
     Cinema cinema;
+    @Column(nullable = false)
     int seatsCount;
 }

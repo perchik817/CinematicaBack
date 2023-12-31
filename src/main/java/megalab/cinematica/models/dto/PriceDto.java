@@ -1,9 +1,7 @@
 package megalab.cinematica.models.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import megalab.cinematica.base.BaseDto;
 import megalab.cinematica.models.enums.Ticket;
 
@@ -11,7 +9,9 @@ import megalab.cinematica.models.enums.Ticket;
 @NoArgsConstructor
 @Getter
 @Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PriceDto extends BaseDto {
+    Long id;
     double price;
     Ticket type;
 }

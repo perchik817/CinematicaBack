@@ -52,4 +52,8 @@ public abstract class BaseServiceImpl<E extends BaseEntity, R extends BaseRep<E>
             throw new DeleteException(ResourceBundle.periodMess("failedToDelete", lang));
         }
     }
+    public boolean isNameUnique(String name) {
+        boolean isUnique = !repo.existsByName(name);
+        return isUnique;
+    }
 }

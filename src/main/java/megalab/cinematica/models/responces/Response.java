@@ -1,0 +1,31 @@
+package megalab.cinematica.models.responces;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import megalab.cinematica.models.enums.Language;
+import megalab.cinematica.utils.ResourceBundle;
+
+@Builder
+@AllArgsConstructor
+@Setter
+@Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
+public class Response <D>{
+    String mess;
+    D data;
+    public static <D> Response<D> getSuccessResponse(D responseData, Language lang) {
+        return Response
+                .<D>builder()
+                .mess(ResourceBundle.periodMess("successResponse", lang))
+                .data(responseData)
+                .build();
+    }
+
+    public static <D> Response<D> getUniqueFieldResponse(String key, Language lang) {
+        return Response
+                .<D>builder()
+                .mess(ResourceBundle.periodMess(key, lang))
+                .build();
+    }
+}

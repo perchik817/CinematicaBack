@@ -10,4 +10,6 @@ public interface BaseService <D extends BaseDto>{
     List<D> findAll();
     D update(D d);
     boolean delete (D d, Language lang);
+    public boolean isNameUnique(String name);
 }
+

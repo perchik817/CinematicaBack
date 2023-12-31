@@ -19,14 +19,14 @@ public class OrderDetails extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
-    @ManyToOne
-    @JoinColumn(name = "id_order")
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_order", nullable = false)
     Order order;
-    @ManyToOne
-    @JoinColumn(name = "id_session")
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_session", nullable = false)
     Session session;
-    @ManyToOne
-    @JoinColumn(name = "id_seats")
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_seats", nullable = false)
     Seats seats;
     double price;
     int num;

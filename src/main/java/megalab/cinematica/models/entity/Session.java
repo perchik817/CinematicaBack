@@ -20,11 +20,11 @@ public class Session extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
-    @ManyToOne
-    @JoinColumn(name = "id_films")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_films", nullable = false)
     Film film;
-    @ManyToOne
-    @JoinColumn(name = "id_hall")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_hall", nullable = false)
     Hall hall;
     Date dateTime;
     double price;

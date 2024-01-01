@@ -12,7 +12,7 @@ import megalab.cinematica.models.dto.SessionDto;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderDetailsCreateRequest {
-    Long id;
+
     OrderDto orderDto;
     SessionDto sessionDto;
     SeatsDto seatsDto;

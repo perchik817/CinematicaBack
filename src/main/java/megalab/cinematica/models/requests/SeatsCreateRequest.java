@@ -12,7 +12,7 @@ import megalab.cinematica.models.enums.SeatsStatus;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SeatsCreateRequest {
-    Long id;
+
     int num;
     int row;
     SeatsStatus status;

@@ -23,10 +23,10 @@ public class Film extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
     String name;
-    MultipartFile logo;
+    String logo;
     String definition;
     @Enumerated(EnumType.STRING)
     Genre genre;
-    String format;
+    String format; //2d, 3d
     Duration duration;
 }

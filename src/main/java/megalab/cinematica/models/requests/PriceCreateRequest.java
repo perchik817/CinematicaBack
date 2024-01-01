@@ -10,7 +10,7 @@ import megalab.cinematica.models.enums.Ticket;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PriceCreateRequest {
-    Long id;
+
     double price;
     Ticket type;
 }

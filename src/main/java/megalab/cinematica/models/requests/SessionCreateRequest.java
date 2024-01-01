@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SessionCreateRequest {
-    Long id;
+
     FilmDto filmDto;
     HallDto hallDto;
     Date dateTime;

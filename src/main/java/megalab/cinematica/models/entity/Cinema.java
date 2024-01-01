@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import megalab.cinematica.base.BaseEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -21,7 +20,7 @@ public class Cinema extends BaseEntity {
     @Id
     @GeneratedValue (strategy = GenerationType.SEQUENCE)
     Long id;
-    MultipartFile logo;
+    String logo;
     @Column(unique = true)
     String name;
     String definition;

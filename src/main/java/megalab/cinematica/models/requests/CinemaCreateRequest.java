@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CinemaCreateRequest {
-    Long id;
+
     MultipartFile logo;
     String name;
     String definition;

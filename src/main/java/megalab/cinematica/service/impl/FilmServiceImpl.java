@@ -5,6 +5,7 @@ import megalab.cinematica.dao.rep.FilmRep;
 import megalab.cinematica.exceptions.NumException;
 import megalab.cinematica.mappers.FilmMapper;
 import megalab.cinematica.microservices.FileServiceFeign;
+import megalab.cinematica.microservices.jsons.FileResponse;
 import megalab.cinematica.models.dto.FilmDto;
 import megalab.cinematica.models.entity.Film;
 import megalab.cinematica.models.enums.Language;
@@ -29,7 +30,8 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
         //TODO add logo
         if(request.getDuration().isNegative() || request.getDuration().isZero()){
             FilmDto filmDto = new FilmDto();
-            //filmDto.setLogo();
+            FileResponse fileResponse = fileService.upload(request.getLogo());
+            filmDto.setLogo(fileResponse.getDownloadUri());
             filmDto.setName(request.getName());
             filmDto.setDefinition(request.getDefinition());
             filmDto.setGenre(request.getGenre());

@@ -13,7 +13,7 @@ import java.time.Duration;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FilmCreateRequest {
-    Long id;
+
     String name;
     MultipartFile logo;
     String definition;

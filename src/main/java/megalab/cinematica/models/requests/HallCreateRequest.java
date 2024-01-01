@@ -11,7 +11,7 @@ import megalab.cinematica.models.dto.CinemaDto;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HallCreateRequest {
-    Long id;
+
     String name;
     CinemaDto cinemaDto;
     int seatsCount;

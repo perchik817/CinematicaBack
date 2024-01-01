@@ -28,4 +28,11 @@ public class Response <D>{
                 .mess(ResourceBundle.periodMess(key, lang))
                 .build();
     }
+
+    public static <D> Response<D> getErrorResponse(String key, Language language) {
+        return Response
+                .<D>builder()
+                .mess(ResourceBundle.periodMess("sessionsOverlap", language))
+                .build();
+    }
 }

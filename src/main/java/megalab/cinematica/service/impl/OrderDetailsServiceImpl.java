@@ -10,7 +10,7 @@ import megalab.cinematica.service.OrderDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrderDetailsServiceImpl extends BaseServiceImpl<OrderDetails, OrderDetailsRep, OrderDetailsDto,OrderDetailsMapper>
+public class OrderDetailsServiceImpl extends BaseServiceImpl<OrderDetails, OrderDetailsRep, OrderDetailsDto, OrderDetailsMapper>
         implements OrderDetailsService {
     protected OrderDetailsServiceImpl(OrderDetailsRep repo, OrderDetailsMapper mapper) {
         super(repo, mapper);

@@ -3,6 +3,7 @@ package megalab.cinematica.service.impl;
 import megalab.cinematica.base.BaseServiceImpl;
 import megalab.cinematica.dao.rep.FilmRep;
 import megalab.cinematica.exceptions.NumException;
+import megalab.cinematica.exceptions.UnsavedDataException;
 import megalab.cinematica.mappers.FilmMapper;
 import megalab.cinematica.microservices.FileServiceFeign;
 import megalab.cinematica.microservices.jsons.FileResponse;
@@ -27,21 +28,24 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
 
     @Override
     public Response create(FilmCreateRequest request, Language language) {
-        //TODO add logo
-        if(request.getDuration().isNegative() || request.getDuration().isZero()){
-            FilmDto filmDto = new FilmDto();
-            FileResponse fileResponse = fileService.upload(request.getLogo());
-            filmDto.setLogo(fileResponse.getDownloadUri());
-            filmDto.setName(request.getName());
-            filmDto.setDefinition(request.getDefinition());
-            filmDto.setGenre(request.getGenre());
-            filmDto.setFormat(request.getFormat());
-            filmDto.setDuration(request.getDuration());
-            mapper.toEntity(filmDto, context);
+        try{
+            if(request.getDuration().isNegative() || request.getDuration().isZero()){
+                FilmDto filmDto = new FilmDto();
+                FileResponse fileResponse = fileService.upload(request.getLogo());
+                filmDto.setLogo(fileResponse.getDownloadUri());
+                filmDto.setName(request.getName());
+                filmDto.setDefinition(request.getDefinition());
+                filmDto.setGenre(request.getGenre());
+                filmDto.setFormat(request.getFormat());
+                filmDto.setDuration(request.getDuration());
+                mapper.toEntity(filmDto, context);
 
-            return Response.getSuccessResponse(filmDto, language);
-        } else {
-            throw new NumException(ResourceBundle.periodMess("incorrectDuration", language));
+                return Response.getSuccessResponse(filmDto, language);
+            } else {
+                throw new NumException(ResourceBundle.periodMess("incorrectDuration", language));
+            }
+        }catch (UnsavedDataException e){
+            throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
         }
     }
 }

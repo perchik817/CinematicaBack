@@ -40,7 +40,7 @@ public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaRep, Cinema
             mapper.toEntity(cinemaDto, context);
 
             return Response.getSuccessResponse(cinemaDto, language);
-        }catch (Exception e){
+        }catch (UnsavedDataException e){
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
         }
     }

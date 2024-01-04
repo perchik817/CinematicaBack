@@ -39,6 +39,7 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
                 filmDto.setFormat(request.getFormat());
                 filmDto.setDuration(request.getDuration());
                 mapper.toEntity(filmDto, context);
+                save(filmDto);
 
                 return Response.getSuccessResponse(filmDto, language);
             } else {

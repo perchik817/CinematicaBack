@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping("/create/order")
+    @PostMapping("/create")
     ResponseEntity<?> create(@RequestParam OrderCreateRequest data, Language language){
         return ResponseEntity.ok(orderService.create(data, language));
     }

@@ -16,7 +16,7 @@ public class FilmController {
 
     private final FilmService filmService;
 
-    @PostMapping("/create/film")
+    @PostMapping("/create")
     ResponseEntity<?> create(@ModelAttribute FilmCreateRequest data, Language language){
         return ResponseEntity.ok(filmService.create(data, language));
     }

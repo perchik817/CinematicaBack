@@ -7,7 +7,7 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(injectionStrategy = InjectionStrategy.CONSTRUCTOR, componentModel = "sping")
+@Mapper (injectionStrategy = InjectionStrategy.CONSTRUCTOR, componentModel = "spring")
 public interface OrderDetailsMapper extends BaseMapper<OrderDetails, OrderDetailsDto> {
     OrderDetailsMapper INSTANCE = Mappers.getMapper(OrderDetailsMapper.class);
 }

@@ -3,6 +3,7 @@ package megalab.cinematica.service.impl;
 import megalab.cinematica.base.BaseServiceImpl;
 import megalab.cinematica.dao.rep.HallRep;
 import megalab.cinematica.exceptions.FindByIdException;
+import megalab.cinematica.exceptions.UnsavedDataException;
 import megalab.cinematica.mappers.HallMapper;
 import megalab.cinematica.models.dto.CinemaDto;
 import megalab.cinematica.models.dto.HallDto;
@@ -27,7 +28,7 @@ public class HallServiceImpl extends BaseServiceImpl<Hall, HallRep, HallDto, Hal
     @Override
     public Response create(HallCreateRequest request, Language lang) {
         try{
-            if(isNameUnique(request.getName())){
+//            if(isNameUnique(request.getName())){
                 CinemaDto cinemaDto = cinemaService.findById(request.getCinemaDto().getId(), lang);
                 request.setCinemaDto(cinemaDto);
 
@@ -36,12 +37,13 @@ public class HallServiceImpl extends BaseServiceImpl<Hall, HallRep, HallDto, Hal
                 hallDto.setCinemaDto(request.getCinemaDto());
                 hallDto.setSeatsCount(request.getSeatsCount());
                 mapper.toEntity(hallDto, context);
+                save(hallDto);
                 return Response.getSuccessResponse(hallDto, lang);
-            }else {
-                return Response.getUniqueFieldResponse("notUniqueName", lang);
-            }
-        }catch (FindByIdException ex){
-            throw new FindByIdException(ResourceBundle.periodMess("idNotFound", lang));
+//            }else {
+//                return Response.getUniqueFieldResponse("notUniqueName", lang);
+//            }
+        }catch (UnsavedDataException e){
+            throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", lang));
         }
 
     }

@@ -16,7 +16,6 @@ import javax.persistence.*;
 public class Order extends BaseEntity {
     @Id
     @GeneratedValue (strategy = GenerationType.SEQUENCE)
-    //@SequenceGenerator()
     Long id;
     double totalPrice;
     int num;

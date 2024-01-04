@@ -5,5 +5,5 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface BaseRep <E extends BaseEntity> extends JpaRepository<E, Long> {
-    boolean existsByName(String name);
+//    boolean existsByName(String name);
 }

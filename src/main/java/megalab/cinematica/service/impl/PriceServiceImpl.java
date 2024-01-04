@@ -29,6 +29,7 @@ public class PriceServiceImpl extends BaseServiceImpl<Price, PriceRep, PriceDto,
                 priceDto.setType(request.getType());
 
                 mapper.toEntity(priceDto, context);
+                save(priceDto);
 
                 return Response.getSuccessResponse(priceDto, language);
             }else {

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "Cinema control")
 public class CinemaController {
     private final CinemaService cinemaService;
-    @PostMapping("/create/cinema")
+    @PostMapping("/create")
     ResponseEntity<?> create(@ModelAttribute CinemaCreateRequest data, Language language){
         return ResponseEntity.ok(cinemaService.create(data, data.getLogo(), language));
     }

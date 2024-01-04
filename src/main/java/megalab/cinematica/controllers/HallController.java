@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "Hall control")
 public class HallController {
     private final HallService hallService;
-    @PostMapping("/create/hall")
+    @PostMapping("/create")
     ResponseEntity<?> create(@RequestParam HallCreateRequest request, Language lang){
         return ResponseEntity.ok(hallService.create(request, lang));
 

@@ -10,7 +10,11 @@ import javax.persistence.MappedSuperclass;
 import java.util.List;
 
 @MappedSuperclass
-public abstract class BaseServiceImpl<E extends BaseEntity, R extends BaseRep<E>, D extends BaseDto, M extends BaseMapper<E, D>> implements BaseService<D> {
+public abstract class BaseServiceImpl<E extends BaseEntity,
+                                        R extends BaseRep<E>,
+                                        D extends BaseDto,
+                                        M extends BaseMapper<E, D>>
+                                        implements BaseService<D> {
     protected final R repo;
     protected final M mapper;
     @Autowired
@@ -52,8 +56,8 @@ public abstract class BaseServiceImpl<E extends BaseEntity, R extends BaseRep<E>
             throw new DeleteException(ResourceBundle.periodMess("failedToDelete", lang));
         }
     }
-    public boolean isNameUnique(String name) {
-        boolean isUnique = !repo.existsByName(name);
-        return isUnique;
-    }
+//    public boolean isNameUnique(String name) {
+//        boolean isUnique = !repo.existsByName(name);
+//        return isUnique;
+//    }
 }

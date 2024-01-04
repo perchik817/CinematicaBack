@@ -23,6 +23,7 @@ public class Cinema extends BaseEntity {
     String logo;
     @Column(unique = true)
     String name;
+    @Column(length = 1000)
     String definition;
     String address;
 }

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PriceController {
     private final PriceService priceService;
 
-    @PostMapping("/create/price")
+    @PostMapping("/create")
     ResponseEntity<?> create(@RequestParam PriceCreateRequest data, Language language){
         return ResponseEntity.ok(priceService.create(data, language));
     }

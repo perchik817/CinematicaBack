@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SessionController {
     private final SessionService sessionService;
 
-    @PostMapping("/create/session")
+    @PostMapping("/create")
     ResponseEntity<?> create(@RequestParam SessionCreateRequest data, Language language){
         return ResponseEntity.ok(sessionService.create(data, language));
     }

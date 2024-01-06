@@ -10,7 +10,6 @@ import megalab.cinematica.base.BaseDto;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HallDto extends BaseDto {
-    Long id;
     String name;
     CinemaDto cinemaDto;
     int seatsCount;

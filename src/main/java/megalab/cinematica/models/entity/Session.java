@@ -17,9 +17,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 public class Session extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long id;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_films", nullable = false)
     Film film;

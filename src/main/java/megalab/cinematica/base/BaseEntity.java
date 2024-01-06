@@ -8,6 +8,9 @@ import java.util.Date;
 @Data
 @MappedSuperclass
 public abstract class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Long id;
     protected Date addDate;
     protected Date updateDate;
     protected boolean active;

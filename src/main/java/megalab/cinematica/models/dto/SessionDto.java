@@ -12,11 +12,9 @@ import java.util.Date;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SessionDto extends BaseDto {
-    Long id;
     FilmDto filmDto;
     HallDto hallDto;
     Date dateTime;
-//    double price;
     PriceDto priceDto;
     double discount;
 }

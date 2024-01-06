@@ -19,9 +19,7 @@ import java.time.Duration;
 @Table(name = "tb_films")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Film extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long id;
+
     String name;
     String logo;
     String definition;

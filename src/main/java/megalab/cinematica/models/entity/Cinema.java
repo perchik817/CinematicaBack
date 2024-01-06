@@ -17,9 +17,7 @@ import javax.persistence.*;
 @Table (name = "tb_cinema")
 @FieldDefaults (level = AccessLevel.PRIVATE)
 public class Cinema extends BaseEntity {
-    @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
-    Long id;
+
     String logo;
     @Column(unique = true)
     String name;

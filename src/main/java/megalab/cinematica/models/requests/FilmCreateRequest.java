@@ -18,6 +18,7 @@ public class FilmCreateRequest {
     MultipartFile logo;
     String definition;
     Genre genre;
+    String ageRestrictions;
     String format;
     Duration duration;
 }

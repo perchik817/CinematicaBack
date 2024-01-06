@@ -40,7 +40,6 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
                     seatsDto.setRow(request.getRow());
                     seatsDto.setStatus(request.getStatus());
                     seatsDto.setHallDto(request.getHallDto());
-                    mapper.toEntity(seatsDto, context);
                     save(seatsDto);
                     return Response.getSuccessResponse(seatsDto, language);
                 } else {

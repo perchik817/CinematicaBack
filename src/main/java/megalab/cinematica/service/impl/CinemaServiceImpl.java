@@ -19,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaRep, CinemaDto, CinemaMapper> implements CinemaService{
 
-    protected CinemaServiceImpl(CinemaRep cinemaRep, CinemaMapper mapper, FileServiceFeign fileService) {
-        super(cinemaRep, mapper);
+    protected CinemaServiceImpl(CinemaRep cinemaRep, CinemaMapper cinemaMapper, FileServiceFeign fileService) {
+        super(cinemaRep, cinemaMapper);
         this.fileService = fileService;
     }
 
@@ -37,7 +37,6 @@ public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaRep, Cinema
             cinemaDto.setName(request.getName());
             cinemaDto.setDefinition(request.getDefinition());
             cinemaDto.setAddress(request.getAddress());
-            mapper.toEntity(cinemaDto, context);
             save(cinemaDto);
             return Response.getSuccessResponse(cinemaDto, language);
         }catch (UnsavedDataException e){

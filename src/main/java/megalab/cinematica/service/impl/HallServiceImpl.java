@@ -4,6 +4,7 @@ import megalab.cinematica.base.BaseServiceImpl;
 import megalab.cinematica.dao.rep.HallRep;
 import megalab.cinematica.exceptions.FindByIdException;
 import megalab.cinematica.exceptions.UnsavedDataException;
+import megalab.cinematica.mappers.CinemaMapper;
 import megalab.cinematica.mappers.HallMapper;
 import megalab.cinematica.models.dto.CinemaDto;
 import megalab.cinematica.models.dto.HallDto;
@@ -18,33 +19,42 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class HallServiceImpl extends BaseServiceImpl<Hall, HallRep, HallDto, HallMapper> implements HallService {
-    protected HallServiceImpl(HallRep repo, HallMapper mapper, CinemaService cinemaService) {
+    protected HallServiceImpl(HallRep repo, HallMapper mapper, CinemaService cinemaService, CinemaMapper cinemaMapper) {
         super(repo, mapper);
         this.cinemaService = cinemaService;
+        this.cinemaMapper = cinemaMapper;
     }
 
     private final CinemaService cinemaService;
+    private final CinemaMapper cinemaMapper;
 
     @Override
     public Response create(HallCreateRequest request, Language lang) {
-        try{
-//            if(isNameUnique(request.getName())){
-                CinemaDto cinemaDto = cinemaService.findById(request.getCinemaDto().getId(), lang);
-                request.setCinemaDto(cinemaDto);
 
+        try{
+
+            if ((repo.findByIdEnt(request.getCinemaId()) != null) && isHallNameUnique(request.getName())) {
                 HallDto hallDto = new HallDto();
                 hallDto.setName(request.getName());
-                hallDto.setCinemaDto(request.getCinemaDto());
+                CinemaDto cinemaDto = cinemaMapper.toDto(repo.findByIdEnt(cinemaMapper.toEntity(
+                        cinemaService.findById(request.getCinemaId(), lang), context).getId()), context);
+                hallDto.setCinemaDto(cinemaDto);
                 hallDto.setSeatsCount(request.getSeatsCount());
-                mapper.toEntity(hallDto, context);
                 save(hallDto);
+                System.out.println(cinemaDto);
                 return Response.getSuccessResponse(hallDto, lang);
-//            }else {
-//                return Response.getUniqueFieldResponse("notUniqueName", lang);
-//            }
+            } else {
+                return Response.getErrorResponse("notUniqueName", lang);
+            }
+
         }catch (UnsavedDataException e){
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", lang));
         }
+    }
 
+
+    public boolean isHallNameUnique(String hallName) {
+        int count = repo.countHallsByName(hallName);
+        return count == 0;
     }
 }

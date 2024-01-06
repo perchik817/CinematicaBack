@@ -31,7 +31,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, OrderRep, OrderDto,
                 OrderDto orderDto = new OrderDto();
                 orderDto.setTotalPrice(request.getTotalPrice());
                 orderDto.setNum(request.getNum());
-                mapper.toEntity(orderDto, context);
                 save(orderDto);
                 return Response.getSuccessResponse(orderDto, language);
             }else {

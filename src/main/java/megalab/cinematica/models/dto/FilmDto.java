@@ -18,6 +18,7 @@ public class FilmDto extends BaseDto {
     String logo;
     String definition;
     Genre genre;
+    String ageRestrictions;
     String format;
     Duration duration;
 }

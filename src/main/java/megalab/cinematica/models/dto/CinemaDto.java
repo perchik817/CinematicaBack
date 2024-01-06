@@ -10,6 +10,7 @@ import megalab.cinematica.base.BaseDto;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString
 public class CinemaDto extends BaseDto {
     Long id;
     String logo;

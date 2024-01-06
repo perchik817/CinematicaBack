@@ -7,13 +7,16 @@ import megalab.cinematica.exceptions.UnsavedDataException;
 import megalab.cinematica.mappers.SessionMapper;
 import megalab.cinematica.models.dto.FilmDto;
 import megalab.cinematica.models.dto.HallDto;
+import megalab.cinematica.models.dto.PriceDto;
 import megalab.cinematica.models.dto.SessionDto;
+import megalab.cinematica.models.entity.Hall;
 import megalab.cinematica.models.entity.Session;
 import megalab.cinematica.models.enums.Language;
 import megalab.cinematica.models.requests.SessionCreateRequest;
 import megalab.cinematica.models.responces.Response;
 import megalab.cinematica.service.FilmService;
 import megalab.cinematica.service.HallService;
+import megalab.cinematica.service.PriceService;
 import megalab.cinematica.service.SessionService;
 import megalab.cinematica.utils.ResourceBundle;
 import org.springframework.stereotype.Service;
@@ -25,43 +28,40 @@ import java.util.List;
 @Service
 public class SessionServiceImpl extends BaseServiceImpl<Session, SessionRep, SessionDto, SessionMapper>
         implements SessionService {
-    protected SessionServiceImpl(SessionRep repo, SessionMapper mapper, FilmService filmService, HallService hallService) {
+    protected SessionServiceImpl(SessionRep repo, SessionMapper mapper, FilmService filmService, HallService hallService, PriceService priceService) {
         super(repo, mapper);
         this.filmService = filmService;
         this.hallService = hallService;
+        this.priceService = priceService;
     }
 
     private final FilmService filmService;
     private final HallService hallService;
+    private final PriceService priceService;
+
 
     @Override
     public Response create(SessionCreateRequest request, Language language) {
         try{
-            if(request.getPrice() > 0){
-                FilmDto filmDto = filmService.findById(request.getFilmDto().getId(), language);
-                HallDto hallDto = hallService.findById(request.getFilmDto().getId(), language);
-                SessionDto sessionDto = new SessionDto();
+            HallDto hallDto = hallService.findById(request.getHallId(), language);
+            FilmDto filmDto = filmService.findById(request.getFilmId(), language);
+            PriceDto priceDto = priceService.findById(request.getPriceId(), language);
+            SessionDto sessionDto = new SessionDto();
 
-                if(!areSessionsInSimilarHall(request, filmDto, hallDto)) {
-                    sessionDto.setFilmDto(request.getFilmDto());
-                    sessionDto.setHallDto(request.getHallDto());
+            if(!areSessionsInSimilarHall(request, filmDto, hallDto)) {
+                if (priceDto.getPrice() > 0 ) {
+                    sessionDto.setHallDto(hallDto);
+                    sessionDto.setFilmDto(filmDto);
+                    sessionDto.setPriceDto(priceDto);
                     sessionDto.setDateTime(request.getDateTime());
-                    if (request.getDiscount() > 0) {
-                        request.setPrice(countPriceWithDisc(request.getPrice(), request.getDiscount()));
-                    }
-                    sessionDto.setPrice(request.getPrice());
-
                     sessionDto.setDiscount(request.getDiscount());
-
-                    mapper.toEntity(sessionDto, context);
                     save(sessionDto);
-
                     return Response.getSuccessResponse(sessionDto, language);
-                }else {
-                    return Response.getErrorResponse("sessionsOverlap", language);
+                } else {
+                    throw new NumException(ResourceBundle.periodMess("priceIsNegative", language));
                 }
-            }else {
-                throw new NumException(ResourceBundle.periodMess("priceIsNegative", language));
+            }else{
+                return Response.getErrorResponse("sessionsOverlap", language);
             }
         }catch (UnsavedDataException e){
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
@@ -94,10 +94,5 @@ public class SessionServiceImpl extends BaseServiceImpl<Session, SessionRep, Ses
                 newSessionEndMillis > existingSessionStart.getTime()) ||
                 (newSessionStart.getTime() < existingSessionEndMillis &&
                         newSessionEndMillis > existingSessionEndMillis);
-    }
-
-    private double countPriceWithDisc(double price, double discount){
-        price *= discount / 0.01;
-        return price;
     }
 }

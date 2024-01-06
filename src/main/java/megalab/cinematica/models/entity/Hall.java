@@ -18,7 +18,7 @@ public class Hall extends BaseEntity {
     Long id;
     @Column(unique = true, nullable = false)
     String name;
-    @ManyToOne (fetch = FetchType.EAGER)
+    @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_cinema", nullable = false)
     Cinema cinema;
     @Column(nullable = false)

@@ -16,6 +16,7 @@ public class SessionDto extends BaseDto {
     FilmDto filmDto;
     HallDto hallDto;
     Date dateTime;
-    double price;
+//    double price;
+    PriceDto priceDto;
     double discount;
 }

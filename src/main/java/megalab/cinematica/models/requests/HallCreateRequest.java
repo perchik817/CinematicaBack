@@ -13,6 +13,6 @@ import megalab.cinematica.models.dto.CinemaDto;
 public class HallCreateRequest {
 
     String name;
-    CinemaDto cinemaDto;
+    Long cinemaId;
     int seatsCount;
 }

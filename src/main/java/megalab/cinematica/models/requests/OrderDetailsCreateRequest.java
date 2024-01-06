@@ -13,9 +13,9 @@ import megalab.cinematica.models.dto.SessionDto;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderDetailsCreateRequest {
 
-    OrderDto orderDto;
-    SessionDto sessionDto;
-    SeatsDto seatsDto;
+    Long orderId;
+    Long sessionId;
+    Long seatsId;
     double price;
     int num;
 }

@@ -38,26 +38,27 @@ public class OrderDetailsServiceImpl extends BaseServiceImpl<OrderDetails, Order
     @Override
     public Response create(OrderDetailsCreateRequest request, Language lan) {
         try{
-            OrderDto orderDto = orderService.findById(request.getOrderDto().getId(), lan);
-            SeatsDto seatsDto = seatsService.findById(request.getSeatsDto().getId(), lan);
-            SessionDto sessionDto = sessionService.findById(request.getSessionDto().getId(), lan);
+            OrderDto orderDto = orderService.findById(request.getOrderId(), lan);
+            SeatsDto seatsDto = seatsService.findById(request.getSeatsId(), lan);
+            SessionDto sessionDto = sessionService.findById(request.getSessionId(), lan);
             OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
 
-            request.setOrderDto(orderDto);
-            request.setSessionDto(sessionDto);
-            request.setSeatsDto(seatsDto);
-
-            orderDetailsDto.setOrderDto(request.getOrderDto());
-            orderDetailsDto.setSessionDto(request.getSessionDto());
-            orderDetailsDto.setSeatsDto(request.getSeatsDto());
+            orderDetailsDto.setOrderDto(orderDto);
+            orderDetailsDto.setSessionDto(sessionDto);
+            orderDetailsDto.setSeatsDto(seatsDto);
+            if(sessionDto.getDiscount() > 0) request.setPrice(countPriceWithDisc(sessionDto.getPriceDto().getPrice(),
+                    sessionDto.getDiscount()));
             orderDetailsDto.setPrice(request.getPrice());
             orderDetailsDto.setNum(request.getNum());
-
-            mapper.toEntity(orderDetailsDto, context);
             save(orderDetailsDto);
             return Response.getSuccessResponse(orderDetailsDto, lan);
         }catch (UnsavedDataException e){
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", lan));
         }
+    }
+
+    private double countPriceWithDisc(double price, double discount){
+        price *= discount / 0.01;
+        return price;
     }
 }

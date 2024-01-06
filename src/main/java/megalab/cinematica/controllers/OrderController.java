@@ -16,7 +16,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/create")
-    ResponseEntity<?> create(@RequestParam OrderCreateRequest data, Language language){
+    ResponseEntity<?> create(@RequestBody OrderCreateRequest data, Language language){
         return ResponseEntity.ok(orderService.create(data, language));
     }
 }

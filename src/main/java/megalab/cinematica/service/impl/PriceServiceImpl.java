@@ -8,7 +8,7 @@ import megalab.cinematica.mappers.PriceMapper;
 import megalab.cinematica.models.dto.PriceDto;
 import megalab.cinematica.models.entity.Price;
 import megalab.cinematica.models.enums.Language;
-import megalab.cinematica.models.requests.PriceCreateRequest;
+import megalab.cinematica.models.enums.Ticket;
 import megalab.cinematica.models.responces.Response;
 import megalab.cinematica.service.PriceService;
 import megalab.cinematica.utils.ResourceBundle;
@@ -21,22 +21,22 @@ public class PriceServiceImpl extends BaseServiceImpl<Price, PriceRep, PriceDto,
     }
 
     @Override
-    public Response create(PriceCreateRequest request, Language language) {
-        try{
-            if(request.getPrice() > 0){
-                PriceDto priceDto = new PriceDto();
-                priceDto.setPrice(request.getPrice());
-                priceDto.setType(request.getType());
+    public Response create(double price, Ticket type, Language language) {
+            try{
+                if(price > 0){
+                    PriceDto priceDto = new PriceDto();
+                    priceDto.setPrice(price);
+                    priceDto.setType(type);
 
-                mapper.toEntity(priceDto, context);
-                save(priceDto);
+                    save(priceDto);
 
-                return Response.getSuccessResponse(priceDto, language);
-            }else {
-                throw new NumException(ResourceBundle.periodMess("priceIsNegative", language));
+                    return Response.getSuccessResponse(priceDto, language);
+                }else {
+                    throw new NumException(ResourceBundle.periodMess("priceIsNegative", language));
+                }
+            }catch (UnsavedDataException e){
+                throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
             }
-        }catch (UnsavedDataException e){
-            throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
-        }
+
     }
 }

@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import megalab.cinematica.models.dto.FilmDto;
 import megalab.cinematica.models.dto.HallDto;
+import megalab.cinematica.models.dto.PriceDto;
 
 import java.util.Date;
 
@@ -14,9 +15,9 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SessionCreateRequest {
 
-    FilmDto filmDto;
-    HallDto hallDto;
+    Long filmId;
+    Long hallId;
+    Long priceId;
     Date dateTime;
-    double price;
     double discount;
 }

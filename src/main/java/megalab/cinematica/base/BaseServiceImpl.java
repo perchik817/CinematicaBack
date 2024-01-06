@@ -19,12 +19,12 @@ public abstract class BaseServiceImpl<E extends BaseEntity,
     protected final M mapper;
     @Autowired
     protected CycleAvoidingMappingContext context;
+    private D d;
 
     protected BaseServiceImpl(R repo, M mapper) {
         this.repo = repo;
         this.mapper = mapper;
     }
-
 
     @Override
     public D save(D d) {
@@ -56,8 +56,4 @@ public abstract class BaseServiceImpl<E extends BaseEntity,
             throw new DeleteException(ResourceBundle.periodMess("failedToDelete", lang));
         }
     }
-//    public boolean isNameUnique(String name) {
-//        boolean isUnique = !repo.existsByName(name);
-//        return isUnique;
-//    }
 }

@@ -27,6 +27,8 @@ public class Session extends BaseEntity {
     @JoinColumn(name = "id_hall", nullable = false)
     Hall hall;
     Date dateTime;
-    double price;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_price", nullable = false)
+    Price price;
     double discount;
 }

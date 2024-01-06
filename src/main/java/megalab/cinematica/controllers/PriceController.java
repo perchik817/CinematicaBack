@@ -3,13 +3,10 @@ package megalab.cinematica.controllers;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import megalab.cinematica.models.enums.Language;
-import megalab.cinematica.models.requests.PriceCreateRequest;
+import megalab.cinematica.models.enums.Ticket;
 import megalab.cinematica.service.PriceService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/price")
@@ -19,7 +16,7 @@ public class PriceController {
     private final PriceService priceService;
 
     @PostMapping("/create")
-    ResponseEntity<?> create(@RequestParam PriceCreateRequest data, Language language){
-        return ResponseEntity.ok(priceService.create(data, language));
+    ResponseEntity<?> create(@RequestParam double price, @RequestParam Ticket type, Language language){
+        return ResponseEntity.ok(priceService.create(price, type, language));
     }
 }

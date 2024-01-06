@@ -36,9 +36,9 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
                 filmDto.setName(request.getName());
                 filmDto.setDefinition(request.getDefinition());
                 filmDto.setGenre(request.getGenre());
+                filmDto.setAgeRestrictions(request.getAgeRestrictions());
                 filmDto.setFormat(request.getFormat());
                 filmDto.setDuration(request.getDuration());
-                mapper.toEntity(filmDto, context);
                 save(filmDto);
 
                 return Response.getSuccessResponse(filmDto, language);

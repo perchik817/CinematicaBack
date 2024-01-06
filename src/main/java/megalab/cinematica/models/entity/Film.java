@@ -27,6 +27,7 @@ public class Film extends BaseEntity {
     String definition;
     @Enumerated(EnumType.STRING)
     Genre genre;
+    String ageRestrictions;
     String format; //2d, 3d
     Duration duration;
 }

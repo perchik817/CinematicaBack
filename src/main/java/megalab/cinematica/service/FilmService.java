@@ -6,6 +6,10 @@ import megalab.cinematica.models.enums.Language;
 import megalab.cinematica.models.requests.FilmCreateRequest;
 import megalab.cinematica.models.responces.Response;
 
+import java.time.Duration;
+
 public interface FilmService extends BaseService<FilmDto> {
     Response create(FilmCreateRequest request, Language language);
+    String formatDuration(Duration duration, Language language);
+    Duration parseDuration(String durationString);
 }

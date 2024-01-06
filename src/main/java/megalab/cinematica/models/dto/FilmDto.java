@@ -20,5 +20,5 @@ public class FilmDto extends BaseDto {
     Genre genre;
     String ageRestrictions;
     String format;
-    Duration duration;
+    String duration;
 }

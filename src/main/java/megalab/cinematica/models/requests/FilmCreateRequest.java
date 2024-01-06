@@ -15,10 +15,10 @@ import java.time.Duration;
 public class FilmCreateRequest {
 
     String name;
-    MultipartFile logo;
+    String logo;
     String definition;
     Genre genre;
     String ageRestrictions;
     String format;
-    Duration duration;
+    String duration;
 }

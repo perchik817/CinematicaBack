@@ -32,7 +32,7 @@ public class Response <D>{
     public static <D> Response<D> getErrorResponse(String key, Language language) {
         return Response
                 .<D>builder()
-                .mess(ResourceBundle.periodMess("", language))
+                .mess(ResourceBundle.periodMess(key, language))
                 .build();
     }
 }

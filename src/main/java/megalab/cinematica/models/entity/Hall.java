@@ -16,10 +16,10 @@ public class Hall extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
-    @Column(unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     String name;
     @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_cinema", nullable = false)
+    @JoinColumn(name = "id_cinema")
     Cinema cinema;
     @Column(nullable = false)
     int seatsCount;

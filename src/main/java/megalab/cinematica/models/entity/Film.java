@@ -29,5 +29,5 @@ public class Film extends BaseEntity {
     Genre genre;
     String ageRestrictions;
     String format; //2d, 3d
-    Duration duration;
+    String duration;
 }

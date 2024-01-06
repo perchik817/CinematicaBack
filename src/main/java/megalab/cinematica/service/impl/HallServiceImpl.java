@@ -2,7 +2,6 @@ package megalab.cinematica.service.impl;
 
 import megalab.cinematica.base.BaseServiceImpl;
 import megalab.cinematica.dao.rep.HallRep;
-import megalab.cinematica.exceptions.FindByIdException;
 import megalab.cinematica.exceptions.UnsavedDataException;
 import megalab.cinematica.mappers.CinemaMapper;
 import megalab.cinematica.mappers.HallMapper;
@@ -15,7 +14,10 @@ import megalab.cinematica.models.responces.Response;
 import megalab.cinematica.service.CinemaService;
 import megalab.cinematica.service.HallService;
 import megalab.cinematica.utils.ResourceBundle;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class HallServiceImpl extends BaseServiceImpl<Hall, HallRep, HallDto, HallMapper> implements HallService {
@@ -33,28 +35,23 @@ public class HallServiceImpl extends BaseServiceImpl<Hall, HallRep, HallDto, Hal
 
         try{
 
-            if ((repo.findByIdEnt(request.getCinemaId()) != null) && isHallNameUnique(request.getName())) {
+            if (repo.findById(request.getCinemaId()) != null && !isHallNameUnique(request.getName())) {
                 HallDto hallDto = new HallDto();
                 hallDto.setName(request.getName());
-                CinemaDto cinemaDto = cinemaMapper.toDto(repo.findByIdEnt(cinemaMapper.toEntity(
-                        cinemaService.findById(request.getCinemaId(), lang), context).getId()), context);
-                hallDto.setCinemaDto(cinemaDto);
+                CinemaDto cinemaDto = cinemaService.findById(request.getCinemaId(), lang);
+                hallDto.setCinemaDto(cinemaMapper.toDto(cinemaMapper.toEntity(cinemaDto, context), context));
                 hallDto.setSeatsCount(request.getSeatsCount());
                 save(hallDto);
-                System.out.println(cinemaDto);
                 return Response.getSuccessResponse(hallDto, lang);
             } else {
-                return Response.getErrorResponse("notUniqueName", lang);
+                return Response.getUniqueFieldResponse("notUniqueName", lang);
             }
-
         }catch (UnsavedDataException e){
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", lang));
         }
     }
 
-
     public boolean isHallNameUnique(String hallName) {
-        int count = repo.countHallsByName(hallName);
-        return count == 0;
+        return repo.existsByName(hallName);
     }
 }

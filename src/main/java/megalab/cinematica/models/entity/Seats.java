@@ -24,7 +24,7 @@ public class Seats extends BaseEntity {
     int row;
     @Enumerated(EnumType.STRING)
     SeatsStatus status;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_hall", nullable = false)
     Hall hall;
 }

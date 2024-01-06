@@ -3,7 +3,6 @@ package megalab.cinematica.models.requests;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import megalab.cinematica.models.dto.HallDto;
 import megalab.cinematica.models.enums.SeatsStatus;
 
 @Setter
@@ -16,5 +15,5 @@ public class SeatsCreateRequest {
     int num;
     int row;
     SeatsStatus status;
-    HallDto hallDto;
+    Long hallId;
 }

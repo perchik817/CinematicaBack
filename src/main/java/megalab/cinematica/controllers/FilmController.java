@@ -8,6 +8,8 @@ import megalab.cinematica.service.FilmService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/v1/film")
 @AllArgsConstructor
@@ -20,4 +22,17 @@ public class FilmController {
     ResponseEntity<?> create(@RequestBody FilmCreateRequest data, Language language){
         return ResponseEntity.ok(filmService.create(data, language));
     }
+
+    @GetMapping("/get/all/cinemas")
+    ResponseEntity<?> getAllCinemas(@RequestParam int limit, int offset){
+        return ResponseEntity.ok(filmService.getAllCinemas(limit, offset));
+    }
+
+
+    @GetMapping("/get/films/on/date")
+    ResponseEntity<?> getAllFilms(@RequestParam Long movieId,
+                                  @RequestParam Date date){
+        return ResponseEntity.ok(filmService.getAllFilms(movieId, date));
+    }
+
 }

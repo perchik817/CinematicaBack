@@ -11,12 +11,15 @@ import megalab.cinematica.models.dto.FilmDto;
 import megalab.cinematica.models.entity.Film;
 import megalab.cinematica.models.enums.Language;
 import megalab.cinematica.models.requests.FilmCreateRequest;
+import megalab.cinematica.models.responces.FilmCinemaResponse;
+import megalab.cinematica.models.responces.FilmResponse;
 import megalab.cinematica.models.responces.Response;
 import megalab.cinematica.service.FilmService;
 import megalab.cinematica.utils.ResourceBundle;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Date;
 
 @Service
 public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, FilmMapper> implements FilmService {
@@ -69,5 +72,15 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
         long seconds = Long.parseLong(parts[2]);
 
         return Duration.ofHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+    }
+
+    @Override
+    public FilmCinemaResponse getAllCinemas(int limit, int offset) {
+        return null;
+    }
+
+    @Override
+    public FilmResponse getAllFilms(Long movieId, Date date) {
+        return null;
     }
 }

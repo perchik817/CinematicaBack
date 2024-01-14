@@ -24,4 +24,6 @@ public class Hall extends BaseEntity {
     Cinema cinema;
     @Column(nullable = false)
     String seatsCount;
+    @Column(nullable = false)
+    String freeSeatsCount;
 }

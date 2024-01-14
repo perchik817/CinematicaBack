@@ -29,7 +29,6 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
         this.hallService = hallService;
     }
     private final HallService hallService;
-    private int seat = 0;
 
     @Override
     public Response create(SeatsCreateRequest request, Language language) {
@@ -43,7 +42,10 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
                     seatsDto.setSeat(request.getSeat());
                     seatsDto.setHall(hall);
                     save(seatsDto);
-                    seat = request.getSeat();
+                    String freeSeatsCount = removeSeat(parseSeatIdsListString(hall.getSeatsCount()), request.getSeat()).toString();
+                    hall.setFreeSeatsCount(freeSeatsCount);
+                    hallService.update(hall);
+                    System.out.println(hall);
                     return Response.getSuccessResponse(seatsDto, language);
                 } else {
                     throw new NumException(ResourceBundle.periodMess("placeNumIsNegative", language));
@@ -70,7 +72,7 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
         HallDto hall = hallService.findById(id, lan);
         HallSeatsResponse hallSeatsResponse = new HallSeatsResponse();
         hallSeatsResponse.setSeatsCount(parseSeatIdsListString(hall.getSeatsCount()));
-        hallSeatsResponse.setFreeSeats(removeSeat(hallSeatsResponse.getSeatsCount(), seat));
+        hallSeatsResponse.setFreeSeats(parseSeatIdsListString(hall.getFreeSeatsCount()));
 
         return hallSeatsResponse;
     }

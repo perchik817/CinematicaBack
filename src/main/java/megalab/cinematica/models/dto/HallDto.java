@@ -17,4 +17,5 @@ public class HallDto extends BaseDto {
     String name;
     CinemaDto cinema;
     String seatsCount;
+    String freeSeatsCount;
 }

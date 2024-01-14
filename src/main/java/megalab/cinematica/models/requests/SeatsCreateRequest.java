@@ -12,8 +12,6 @@ import megalab.cinematica.models.enums.SeatsStatus;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SeatsCreateRequest {
 
-    int num;
-    int row;
-    SeatsStatus status;
+    int seat;
     Long hallId;
 }

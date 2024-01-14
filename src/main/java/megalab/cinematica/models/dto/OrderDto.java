@@ -10,6 +10,7 @@ import megalab.cinematica.base.BaseDto;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderDto extends BaseDto {
+    Long id;
     double totalPrice;
     int num;
 }

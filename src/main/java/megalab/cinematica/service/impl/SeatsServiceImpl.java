@@ -1,66 +1,114 @@
 package megalab.cinematica.service.impl;
 
 import megalab.cinematica.base.BaseServiceImpl;
-import megalab.cinematica.dao.rep.SeatsRep;
-import megalab.cinematica.exceptions.FindByIdException;
+import megalab.cinematica.dao.SeatsRep;
 import megalab.cinematica.exceptions.NumException;
 import megalab.cinematica.exceptions.PlaceIsOccupied;
 import megalab.cinematica.exceptions.UnsavedDataException;
-import megalab.cinematica.mappers.HallMapper;
 import megalab.cinematica.mappers.SeatsMapper;
 import megalab.cinematica.models.dto.HallDto;
 import megalab.cinematica.models.dto.SeatsDto;
 import megalab.cinematica.models.entity.Seats;
 import megalab.cinematica.models.enums.Language;
-import megalab.cinematica.models.enums.SeatsStatus;
 import megalab.cinematica.models.requests.SeatsCreateRequest;
+import megalab.cinematica.models.responces.HallSeatsResponse;
 import megalab.cinematica.models.responces.Response;
 import megalab.cinematica.service.HallService;
 import megalab.cinematica.service.SeatsService;
 import megalab.cinematica.utils.ResourceBundle;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
-public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto, SeatsMapper> implements SeatsService {
-    protected SeatsServiceImpl(SeatsRep repo, SeatsMapper mapper, HallService hallService, HallMapper hallMapper) {
+public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto, SeatsMapper>
+        implements SeatsService {
+    protected SeatsServiceImpl(SeatsRep repo, SeatsMapper mapper, HallService hallService) {
         super(repo, mapper);
         this.hallService = hallService;
-        this.hallMapper = hallMapper;
     }
     private final HallService hallService;
-    private final HallMapper hallMapper;
+    private int seat = 0;
 
     @Override
     public Response create(SeatsCreateRequest request, Language language) {
         try {
-            if(repo.findById(request.getHallId()) != null) {
-
-                if (request.getRow() > 0 && request.getNum() > 0) {
-                    if (placeIsFree(request.getStatus())) {
-                        SeatsDto seatsDto = new SeatsDto();
-                        seatsDto.setNum(request.getNum());
-                        seatsDto.setRow(request.getRow());
-                        HallDto hallDto = hallService.findById(request.getHallId(), language);
-                        System.out.println(hallDto);
-                        seatsDto.setHallDto(hallMapper.toDto(hallMapper.toEntity(hallDto, context), context));
-                        seatsDto.setStatus(request.getStatus());
-                        save(seatsDto);
-                        return Response.getSuccessResponse(seatsDto, language);
-                    } else {
-                        throw new PlaceIsOccupied(ResourceBundle.periodMess("placeIsOccupied", language));
-                    }
+            HallDto hall = hallService.findById(request.getHallId(), language);
+            if(seatIsOccupied(request.getSeat())){
+                throw new PlaceIsOccupied(ResourceBundle.periodMess("placeIsOccupied", language));
+            }else {
+                if (request.getSeat() > 0) {
+                    SeatsDto seatsDto = new SeatsDto();
+                    seatsDto.setSeat(request.getSeat());
+                    seatsDto.setHall(hall);
+                    save(seatsDto);
+                    seat = request.getSeat();
+                    return Response.getSuccessResponse(seatsDto, language);
                 } else {
                     throw new NumException(ResourceBundle.periodMess("placeNumIsNegative", language));
                 }
-            }else{
-                return Response.getUniqueFieldResponse("idNotFound", language);
             }
         }catch (UnsavedDataException e){
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
         }
     }
 
-    private boolean placeIsFree(SeatsStatus status){
-        return status.equals(SeatsStatus.FREE);
+    private boolean seatIsOccupied(int seat){
+        List<SeatsDto> seats = findAll();
+        boolean occupied = false;
+        for (SeatsDto seatsDto : seats) {
+            if (seatsDto.getSeat() == seat){
+                occupied = true;
+            }
+        }
+        return occupied;
     }
+
+    @Override
+    public HallSeatsResponse getHallSeats(Long id, Language lan) {
+        HallDto hall = hallService.findById(id, lan);
+        HallSeatsResponse hallSeatsResponse = new HallSeatsResponse();
+        hallSeatsResponse.setSeatsCount(parseSeatIdsListString(hall.getSeatsCount()));
+        hallSeatsResponse.setFreeSeats(removeSeat(hallSeatsResponse.getSeatsCount(), seat));
+
+        return hallSeatsResponse;
+    }
+
+    private static List<List<Integer>> parseSeatIdsListString(String seatIdsListString) {
+        List<List<Integer>> seatIdsList = new ArrayList<>();
+
+        if (seatIdsListString.trim().isEmpty()) return seatIdsList;
+
+        String[] rowStrings = seatIdsListString.replaceAll("\\[", "").split("\\],");
+
+        for (String rowString : rowStrings) {
+            String[] seatStrings = rowString.split(",");
+            List<Integer> rowSeatIds = new ArrayList<>();
+
+            for (String seatString : seatStrings) {
+                if (!seatString.trim().isEmpty()) {
+                    seatString = seatString.replaceAll("\\]", "");
+                    rowSeatIds.add(Integer.parseInt(seatString.trim()));
+                }
+            }
+
+            seatIdsList.add(rowSeatIds);
+        }
+
+        return seatIdsList;
+    }
+
+
+    private static List<List<Integer>> removeSeat(List<List<Integer>> seatIdsList, int selectedSeat) {
+        for (List<Integer> row : seatIdsList) {
+            if (row.contains(selectedSeat)) {
+                row.remove(Integer.valueOf(selectedSeat));
+                break;
+            }
+        }
+
+        return seatIdsList;
+    }
+
 }

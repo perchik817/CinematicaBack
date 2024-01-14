@@ -17,12 +17,19 @@ import javax.persistence.*;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Seats extends BaseEntity {
-
-    int num;
-    int row;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    Long id;
+    int seat;
     @Enumerated(EnumType.STRING)
     SeatsStatus status;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_hall", nullable = false)
     Hall hall;
+
+    @Override
+    protected void onCreate() {
+        super.onCreate();
+        status = SeatsStatus.OCCUPIED;
+    }
 }

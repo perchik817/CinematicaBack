@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 import megalab.cinematica.base.BaseEntity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_hall")
@@ -13,12 +14,14 @@ import javax.persistence.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 public class Hall extends BaseEntity {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    Long id;
     @Column(name = "name", unique = true, nullable = false)
     String name;
-    @ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cinema")
     Cinema cinema;
     @Column(nullable = false)
-    int seatsCount;
+    String seatsCount;
 }

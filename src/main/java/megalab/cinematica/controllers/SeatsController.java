@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "Seats control")
 public class SeatsController {
     private final SeatsService seatsService;
+    @GetMapping("/view/hall/seats")
+    ResponseEntity<?> getHallSeats(@RequestParam Long id, @RequestParam Language lan){
+        return ResponseEntity.ok(seatsService.getHallSeats(id, lan));
+    }
     @PostMapping("/create")
     ResponseEntity<?> create(@RequestBody SeatsCreateRequest data, Language lang) {
         return ResponseEntity.ok(seatsService.create(data, lang));

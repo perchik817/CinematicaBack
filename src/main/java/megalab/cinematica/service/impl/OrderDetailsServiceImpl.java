@@ -1,13 +1,9 @@
 package megalab.cinematica.service.impl;
 
 import megalab.cinematica.base.BaseServiceImpl;
-import megalab.cinematica.dao.rep.OrderDetailsRep;
-import megalab.cinematica.exceptions.FindByIdException;
+import megalab.cinematica.dao.OrderDetailsRep;
 import megalab.cinematica.exceptions.UnsavedDataException;
 import megalab.cinematica.mappers.OrderDetailsMapper;
-import megalab.cinematica.mappers.OrderMapper;
-import megalab.cinematica.mappers.SeatsMapper;
-import megalab.cinematica.mappers.SessionMapper;
 import megalab.cinematica.models.dto.OrderDetailsDto;
 import megalab.cinematica.models.dto.OrderDto;
 import megalab.cinematica.models.dto.SeatsDto;
@@ -23,49 +19,43 @@ import megalab.cinematica.service.SessionService;
 import megalab.cinematica.utils.ResourceBundle;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class OrderDetailsServiceImpl extends BaseServiceImpl<OrderDetails, OrderDetailsRep, OrderDetailsDto, OrderDetailsMapper>
         implements OrderDetailsService {
 
-    protected OrderDetailsServiceImpl(OrderDetailsRep repo, OrderDetailsMapper mapper, OrderService orderService, OrderMapper orderMapper, SessionService sessionService, SessionMapper sessionMapper, SeatsService seatsService, SeatsMapper seatsMapper) {
-        super(repo, mapper);
-        this.orderService = orderService;
-        this.orderMapper = orderMapper;
-        this.sessionService = sessionService;
-        this.sessionMapper = sessionMapper;
-        this.seatsService = seatsService;
-        this.seatsMapper = seatsMapper;
-    }
 
     private final OrderService orderService;
-    private final OrderMapper orderMapper;
     private final SessionService sessionService;
-    private final SessionMapper sessionMapper;
     private final SeatsService seatsService;
-    private final SeatsMapper seatsMapper;
+
+    protected OrderDetailsServiceImpl(OrderDetailsRep repo, OrderDetailsMapper mapper, OrderService orderService, SessionService sessionService, SeatsService seatsService) {
+        super(repo, mapper);
+        this.orderService = orderService;
+        this.sessionService = sessionService;
+        this.seatsService = seatsService;
+    }
 
 
     @Override
     public Response create(OrderDetailsCreateRequest request, Language lan) {
         try{
-            if(repo.findById(request.getOrderId()) != null
-                    && repo.findById(request.getSeatsId()) != null
-                    && repo.findById(request.getSessionId()) != null) {
+            OrderDto order = orderService.findById(request.getOrderId(), lan);
+            SeatsDto seats = seatsService.findById(request.getSeatsId(), lan);
+            SessionDto session = sessionService.findById(request.getSessionId(), lan);
+            if(Objects.nonNull(order) && Objects.nonNull(seats) && Objects.nonNull(session)) {
+                OrderDetailsDto orderDetails = new OrderDetailsDto();
 
-                OrderDto orderDto = orderService.findById(request.getOrderId(), lan);
-                SeatsDto seatsDto = seatsService.findById(request.getSeatsId(), lan);
-                SessionDto sessionDto = sessionService.findById(request.getSessionId(), lan);
-                OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
-
-                orderDetailsDto.setOrderDto(orderMapper.toDto(orderMapper.toEntity(orderDto, context), context));
-                orderDetailsDto.setSessionDto(sessionMapper.toDto(sessionMapper.toEntity(sessionDto, context), context));
-                orderDetailsDto.setSeatsDto(seatsMapper.toDto(seatsMapper.toEntity(seatsDto, context), context));
-                if (sessionDto.getDiscount() > 0)
-                    request.setPrice(countPriceWithDisc(sessionDto.getPriceDto().getPrice(), sessionDto.getDiscount()));
-                orderDetailsDto.setPrice(request.getPrice());
-                orderDetailsDto.setNum(request.getNum());
-                save(orderDetailsDto);
-                return Response.getSuccessResponse(orderDetailsDto, lan);
+                orderDetails.setOrder(order);
+                orderDetails.setSession(session);
+                orderDetails.setSeats(seats);
+                if (session.getDiscount() > 0)
+                    request.setPrice(countPriceWithDisc(session.getPrice().getPrice(), session.getDiscount()));
+                orderDetails.setPrice(request.getPrice());
+                orderDetails.setNum(request.getNum());
+                save(orderDetails);
+                return Response.getSuccessResponse(orderDetails, lan);
             } else {
                 return Response.getUniqueFieldResponse("idNotFound", lan);
             }

@@ -1,7 +1,7 @@
 package megalab.cinematica.service.impl;
 
 import megalab.cinematica.base.BaseServiceImpl;
-import megalab.cinematica.dao.rep.FilmRep;
+import megalab.cinematica.dao.FilmRep;
 import megalab.cinematica.exceptions.NumException;
 import megalab.cinematica.exceptions.UnsavedDataException;
 import megalab.cinematica.mappers.FilmMapper;

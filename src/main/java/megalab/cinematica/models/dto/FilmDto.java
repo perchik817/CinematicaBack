@@ -13,6 +13,7 @@ import java.time.Duration;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FilmDto extends BaseDto {
+    Long id;
     String name;
     String logo;
     String definition;

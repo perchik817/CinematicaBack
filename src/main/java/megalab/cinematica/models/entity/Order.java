@@ -14,7 +14,9 @@ import javax.persistence.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class Order extends BaseEntity {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    Long id;
     double totalPrice;
     int num;
 }

@@ -1,18 +1,14 @@
 package megalab.cinematica.service.impl;
 
 import megalab.cinematica.base.BaseServiceImpl;
-import megalab.cinematica.dao.rep.SessionRep;
+import megalab.cinematica.dao.SessionRep;
 import megalab.cinematica.exceptions.NumException;
 import megalab.cinematica.exceptions.UnsavedDataException;
-import megalab.cinematica.mappers.FilmMapper;
-import megalab.cinematica.mappers.HallMapper;
-import megalab.cinematica.mappers.PriceMapper;
 import megalab.cinematica.mappers.SessionMapper;
 import megalab.cinematica.models.dto.FilmDto;
 import megalab.cinematica.models.dto.HallDto;
 import megalab.cinematica.models.dto.PriceDto;
 import megalab.cinematica.models.dto.SessionDto;
-import megalab.cinematica.models.entity.Hall;
 import megalab.cinematica.models.entity.Session;
 import megalab.cinematica.models.enums.Language;
 import megalab.cinematica.models.requests.SessionCreateRequest;
@@ -27,47 +23,39 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class SessionServiceImpl extends BaseServiceImpl<Session, SessionRep, SessionDto, SessionMapper>
         implements SessionService {
-    protected SessionServiceImpl(SessionRep repo, SessionMapper mapper, FilmService filmService,
-                                 FilmMapper filmMapper, HallService hallService, HallMapper hallMapper,
-                                 PriceService priceService, PriceMapper priceMapper) {
-        super(repo, mapper);
-        this.filmService = filmService;
-        this.filmMapper = filmMapper;
-        this.hallService = hallService;
-        this.hallMapper = hallMapper;
-        this.priceService = priceService;
-        this.priceMapper = priceMapper;
-    }
+
 
     private final FilmService filmService;
-    private final FilmMapper filmMapper;
     private final HallService hallService;
-    private final HallMapper hallMapper;
     private final PriceService priceService;
-    private final PriceMapper priceMapper;
+
+    protected SessionServiceImpl(SessionRep repo, SessionMapper mapper, FilmService filmService, HallService hallService, PriceService priceService) {
+        super(repo, mapper);
+        this.filmService = filmService;
+        this.hallService = hallService;
+        this.priceService = priceService;
+    }
+
 
     @Override
     public Response create(SessionCreateRequest request, Language language) {
         try{
-            if(repo.findById(request.getFilmId()) != null &&
-                repo.findById(request.getHallId()) != null &&
-                repo.findById(request.getPriceId()) != null) {
-                HallDto hallDto = hallService.findById(request.getHallId(), language);
-                FilmDto filmDto = filmService.findById(request.getFilmId(), language);
-                PriceDto priceDto = priceService.findById(request.getPriceId(), language);
+            HallDto hall = hallService.findById(request.getHallId(), language);
+            FilmDto film = filmService.findById(request.getFilmId(), language);
+            PriceDto price = priceService.findById(request.getPriceId(), language);
+            if(Objects.nonNull(hall) && Objects.nonNull(film) && Objects.nonNull(price)) {
                 SessionDto sessionDto = new SessionDto();
-
-                Duration filmDuration = filmService.parseDuration(filmDto.getDuration());
-
-                if (!areSessionsInSimilarHall(request, filmDuration, hallDto)) {
-                    if (priceDto.getPrice() > 0) {
-                        sessionDto.setHallDto(hallMapper.toDto(hallMapper.toEntity(hallDto, context), context));
-                        sessionDto.setFilmDto(filmMapper.toDto(filmMapper.toEntity(filmDto, context), context));
-                        sessionDto.setPriceDto(priceMapper.toDto(priceMapper.toEntity(priceDto, context), context));
+                Duration filmDuration = filmService.parseDuration(film.getDuration());
+                if (!areSessionsInSimilarHall(request, filmDuration, hall)) {
+                    if (price.getPrice() > 0) {
+                        sessionDto.setHall(hall);
+                        sessionDto.setFilm(film);
+                        sessionDto.setPrice(price);
                         sessionDto.setDateTime(request.getDateTime());
                         sessionDto.setDiscount(request.getDiscount());
                         save(sessionDto);
@@ -88,12 +76,14 @@ public class SessionServiceImpl extends BaseServiceImpl<Session, SessionRep, Ses
 
     private boolean areSessionsInSimilarHall(SessionCreateRequest request, Duration filmDuration, HallDto hallDto){
         Date requestDateTime = request.getDateTime();
+
+
         List<SessionDto> sessionDtos = findAll();
 
         for (SessionDto session : sessionDtos) {
-            if (session.getHallDto().getId().equals(hallDto.getId())) {
-                if (isSessionOverlap(requestDateTime, filmDuration,
-                        session.getDateTime(), filmService.parseDuration(session.getFilmDto().getDuration()))) {
+            if (session.getHall().getId().equals(hallDto.getId())) {
+                if (!isSessionOverlap(requestDateTime, filmDuration,
+                        session.getDateTime(), filmService.parseDuration(session.getFilm().getDuration()))) {
                     return true;
                 }
             }
@@ -105,7 +95,7 @@ public class SessionServiceImpl extends BaseServiceImpl<Session, SessionRep, Ses
                                      Date existingSessionDate, Duration existingSessionDuration){
         Date requestSessionEnd = addDurationToStartDate(requestSessionDate, requestSessionDuration);
         Date existingSessionEnd = addDurationToStartDate(existingSessionDate, existingSessionDuration);
-        return compareEndTimes(requestSessionEnd, existingSessionEnd) < 0;
+        return compareEndTimes(requestSessionEnd, existingSessionEnd) == 0;
     }
 
     private Date addDurationToStartDate(Date startDate, Duration duration) {

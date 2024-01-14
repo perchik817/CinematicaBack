@@ -15,4 +15,5 @@ public class HallCreateRequest {
     String name;
     Long cinemaId;
     int seatsCount;
+    int rowsCount;
 }

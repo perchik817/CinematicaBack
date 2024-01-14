@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import megalab.cinematica.base.BaseDto;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -11,7 +13,8 @@ import megalab.cinematica.base.BaseDto;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
 public class HallDto extends BaseDto {
+    Long id;
     String name;
     CinemaDto cinema;
-    int seatsCount;
+    String seatsCount;
 }

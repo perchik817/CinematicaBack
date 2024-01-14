@@ -1,7 +1,7 @@
 package megalab.cinematica.service.impl;
 
 import megalab.cinematica.base.BaseServiceImpl;
-import megalab.cinematica.dao.rep.PriceRep;
+import megalab.cinematica.dao.PriceRep;
 import megalab.cinematica.exceptions.NumException;
 import megalab.cinematica.exceptions.UnsavedDataException;
 import megalab.cinematica.mappers.PriceMapper;

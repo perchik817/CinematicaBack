@@ -1,5 +1,6 @@
 package megalab.cinematica.base;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,10 +8,9 @@ import java.util.Date;
 
 @Data
 @MappedSuperclass
+
 public abstract class BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    protected Long id;
+
     protected Date addDate;
     protected Date updateDate;
     protected boolean active;
@@ -18,6 +18,8 @@ public abstract class BaseEntity {
     @PrePersist
     protected void onCreate(){
         addDate = new Date();
+        updateDate = new Date();
+        active = true;
     }
 
     @PreUpdate

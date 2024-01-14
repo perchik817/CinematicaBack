@@ -7,7 +7,7 @@ import megalab.cinematica.microservices.FileServiceFeign;
 import megalab.cinematica.microservices.jsons.FileResponse;
 import megalab.cinematica.models.dto.CinemaDto;
 import megalab.cinematica.models.entity.Cinema;
-import megalab.cinematica.dao.rep.CinemaRep;
+import megalab.cinematica.dao.CinemaRep;
 import megalab.cinematica.models.enums.Language;
 import megalab.cinematica.models.requests.CinemaCreateRequest;
 import megalab.cinematica.models.responces.Response;

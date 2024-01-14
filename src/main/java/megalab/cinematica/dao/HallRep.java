@@ -1,4 +1,4 @@
-package megalab.cinematica.dao.rep;
+package megalab.cinematica.dao;
 
 import feign.Param;
 import megalab.cinematica.base.BaseRep;
@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HallRep extends BaseRep<Hall> {
     boolean existsByName(String name);
+    @Query("select c from Cinema c where c.id = :cinemaId")
+    Cinema findByIdCinema(@Param("cinemaId") Long cinemaId);
 }

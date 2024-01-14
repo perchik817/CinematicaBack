@@ -25,7 +25,6 @@ public abstract class BaseServiceImpl<E extends BaseEntity,
         this.repo = repo;
         this.mapper = mapper;
     }
-
     @Override
     public D save(D d) {
         return mapper.toDto(repo.save(mapper.toEntity(d, context)), context);

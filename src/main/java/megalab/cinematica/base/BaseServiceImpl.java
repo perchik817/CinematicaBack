@@ -42,7 +42,7 @@ public abstract class BaseServiceImpl<E extends BaseEntity,
 
     @Override
     public D update(D d) {
-        return mapper.toDto(repo.saveAndFlush(mapper.toEntity(d, context)), context);
+        return mapper.toDto(repo.save(mapper.toEntity(d, context)), context);
     }
 
     @Override

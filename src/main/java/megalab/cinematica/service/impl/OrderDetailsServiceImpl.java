@@ -44,21 +44,17 @@ public class OrderDetailsServiceImpl extends BaseServiceImpl<OrderDetails, Order
             OrderDto order = orderService.findById(request.getOrderId(), lan);
             SeatsDto seats = seatsService.findById(request.getSeatsId(), lan);
             SessionDto session = sessionService.findById(request.getSessionId(), lan);
-            if(Objects.nonNull(order) && Objects.nonNull(seats) && Objects.nonNull(session)) {
-                OrderDetailsDto orderDetails = new OrderDetailsDto();
+            OrderDetailsDto orderDetails = new OrderDetailsDto();
 
-                orderDetails.setOrder(order);
-                orderDetails.setSession(session);
-                orderDetails.setSeats(seats);
-                if (session.getDiscount() > 0)
-                    request.setPrice(countPriceWithDisc(session.getPrice().getPrice(), session.getDiscount()));
-                orderDetails.setPrice(request.getPrice());
-                orderDetails.setNum(request.getNum());
-                save(orderDetails);
-                return Response.getSuccessResponse(orderDetails, lan);
-            } else {
-                return Response.getUniqueFieldResponse("idNotFound", lan);
-            }
+            orderDetails.setOrder(order);
+            orderDetails.setSession(session);
+            orderDetails.setSeats(seats);
+            if (session.getDiscount() > 0)
+                request.setPrice(countPriceWithDisc(session.getPrice().getPrice(), session.getDiscount()));
+            orderDetails.setPrice(request.getPrice());
+            orderDetails.setNum(request.getNum());
+            save(orderDetails);
+            return Response.getSuccessResponse(orderDetails, lan);
         }catch (UnsavedDataException e){
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", lan));
         }

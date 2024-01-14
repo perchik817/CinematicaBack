@@ -23,16 +23,16 @@ public class FilmController {
         return ResponseEntity.ok(filmService.create(data, language));
     }
 
-    @GetMapping("/get/all/cinemas")
-    ResponseEntity<?> getAllCinemas(@RequestParam int limit, int offset){
-        return ResponseEntity.ok(filmService.getAllCinemas(limit, offset));
+    @GetMapping("/get/all/films")
+    ResponseEntity<?> getAllFilms(@RequestParam int limit, int offset){
+        return ResponseEntity.ok(filmService.getAllFilms(limit, offset));
     }
 
 
-    @GetMapping("/get/films/on/date")
-    ResponseEntity<?> getAllFilms(@RequestParam Long movieId,
+    @GetMapping("/get/cinemas/on/date")
+    ResponseEntity<?> getAllCinemasByFilm(@RequestParam Long movieId,
                                   @RequestParam Date date){
-        return ResponseEntity.ok(filmService.getAllFilms(movieId, date));
+        return ResponseEntity.ok(filmService.getAllCinemasByFilm(movieId, date));
     }
 
 }

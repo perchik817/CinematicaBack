@@ -11,15 +11,18 @@ import megalab.cinematica.models.dto.FilmDto;
 import megalab.cinematica.models.entity.Film;
 import megalab.cinematica.models.enums.Language;
 import megalab.cinematica.models.requests.FilmCreateRequest;
-import megalab.cinematica.models.responces.FilmCinemaResponse;
-import megalab.cinematica.models.responces.FilmResponse;
+import megalab.cinematica.models.responces.FilmsResponse;
+import megalab.cinematica.models.responces.FilmCinemasResponse;
 import megalab.cinematica.models.responces.Response;
 import megalab.cinematica.service.FilmService;
 import megalab.cinematica.utils.ResourceBundle;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, FilmMapper> implements FilmService {
@@ -75,12 +78,14 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
     }
 
     @Override
-    public FilmCinemaResponse getAllCinemas(int limit, int offset) {
-        return null;
+    public List<FilmsResponse> getAllFilms(int limit, int offset) {
+        Page<FilmsResponse> pageResult = repo.getAllFilms(PageRequest.of(offset, limit));
+        return pageResult.getContent();
     }
 
+
     @Override
-    public FilmResponse getAllFilms(Long movieId, Date date) {
+    public FilmCinemasResponse getAllCinemasByFilm(Long movieId, Date date) {
         return null;
     }
 }

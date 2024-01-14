@@ -42,7 +42,8 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
                     seatsDto.setSeat(request.getSeat());
                     seatsDto.setHall(hall);
                     save(seatsDto);
-                    String freeSeatsCount = removeSeat(parseSeatIdsListString(hall.getSeatsCount()), request.getSeat()).toString();
+                    String freeSeatsCount = removeSeat(parseSeatIdsListString(hall.getSeatsCount()),
+                            request.getSeat()).toString();
                     hall.setFreeSeatsCount(freeSeatsCount);
                     hallService.update(hall);
                     System.out.println(hall);

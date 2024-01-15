@@ -4,11 +4,14 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Date;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class HallsResponse {
-    String name;
-    List<HallFilmId> roomMovieId;
+public class SessionDetailsResponse {
+    Long id;
+    Double standardPrice;
+    Double childPrice;
+    Double studentPrice;
+    Date startTime;
 }

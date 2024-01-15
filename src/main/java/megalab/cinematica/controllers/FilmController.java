@@ -31,7 +31,7 @@ public class FilmController {
 
     @GetMapping("/get/cinemas/on/date")
     ResponseEntity<?> getAllCinemasByFilm(@RequestParam Long movieId,
-                                  @RequestParam Date date){
+                                  @RequestParam String date){
         return ResponseEntity.ok(filmService.getAllSessionsByFilm(movieId, date));
     }
 

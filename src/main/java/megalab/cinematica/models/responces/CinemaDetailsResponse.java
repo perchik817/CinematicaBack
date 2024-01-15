@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CinemasResponse {
+public class CinemaDetailsResponse {
     String name;
-    List<HallsResponse> rooms;
+    List<HallDetailsResponse> rooms;
 }

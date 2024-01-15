@@ -26,18 +26,30 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, OrderRep, OrderDto,
     @Override
     public Response create(OrderCreateRequest request, Language language) {
         try{
-            if(request.getTotalPrice() > 0) {
-                OrderDto orderDto = new OrderDto();
-
-                orderDto.setTotalPrice(request.getTotalPrice());
-                orderDto.setNum(request.getNum());
-                save(orderDto);
-                return Response.getSuccessResponse(orderDto, language);
-            }else {
-                throw new NumException(ResourceBundle.periodMess("priceIsNegative", language));
-            }
+            OrderDto orderDto = new OrderDto();
+            orderDto.setNum(Math.toIntExact(orderDto.getId()));
+            orderDto.setTotalPrice(request.getTotalPrice());
+            save(orderDto);
+            return Response.getSuccessResponse(orderDto, language);
         }catch (UnsavedDataException e){
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
         }
     }
+
+//    @Override
+//    public Response create(OrderCreateRequest request, Language language) {
+//        try{
+//            if(request.getTotalPrice() > 0) {
+//                OrderDto orderDto = new OrderDto();
+//                orderDto.setTotalPrice(request.getTotalPrice());
+//                orderDto.setNum(request.getNum());
+//                save(orderDto);
+//                return Response.getSuccessResponse(orderDto, language);
+//            }else {
+//                throw new NumException(ResourceBundle.periodMess("priceIsNegative", language));
+//            }
+//        }catch (UnsavedDataException e){
+//            throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
+//        }
+//    }
 }

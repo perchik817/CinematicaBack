@@ -22,4 +22,11 @@ public class SeatsController {
     ResponseEntity<?> create(@RequestBody SeatsCreateRequest data, Language lang) {
         return ResponseEntity.ok(seatsService.create(data, lang));
     }
+
+    @PostMapping("/delete")
+    ResponseEntity<?> delete(@RequestParam Long hallId,
+                             @RequestParam int selectedSeat,
+                             @RequestParam Language language){
+        return ResponseEntity.ok(seatsService.removeSeat(hallId, selectedSeat, language));
+    }
 }

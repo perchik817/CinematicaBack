@@ -5,7 +5,7 @@ import megalab.cinematica.models.dto.FilmDto;
 import megalab.cinematica.models.enums.Language;
 import megalab.cinematica.models.requests.FilmCreateRequest;
 import megalab.cinematica.models.responces.FilmsResponse;
-import megalab.cinematica.models.responces.FilmCinemasResponse;
+import megalab.cinematica.models.responces.FilmSessionsResponse;
 import megalab.cinematica.models.responces.Response;
 
 import java.time.Duration;
@@ -19,5 +19,5 @@ public interface FilmService extends BaseService<FilmDto> {
 
     List<FilmsResponse> getAllFilms(int limit, int offset);
 
-    List<FilmCinemasResponse> getAllSessionsByFilm(Long movieId, Date date);
+    FilmSessionsResponse getAllSessionsByFilm(Long movieId, String date);
 }

@@ -10,4 +10,5 @@ import megalab.cinematica.models.responces.Response;
 public interface SeatsService extends BaseService<SeatsDto> {
     Response create(SeatsCreateRequest request, Language language);
     HallSeatsResponse getHallSeats(Long id, Language lan);
+    Response removeSeat(Long hallId, int selectedSeat, Language language);
 }

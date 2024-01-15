@@ -22,16 +22,23 @@ public class Response <D>{
                 .build();
     }
 
-    public static <D> Response<D> getUniqueFieldResponse(String key, Language lang) {
+    public static Response getSuccessDelete(String key, Language lang) {
         return Response
-                .<D>builder()
+                .builder()
+                .mess(ResourceBundle.periodMess("successDelete", lang))
+                .build();
+    }
+
+    public static Response getUniqueFieldResponse(String key, Language lang) {
+        return Response
+                .builder()
                 .mess(ResourceBundle.periodMess(key, lang))
                 .build();
     }
 
-    public static <D> Response<D> getErrorResponse(String key, Language language) {
+    public static Response getErrorResponse(String key, Language language) {
         return Response
-                .<D>builder()
+                .builder()
                 .mess(ResourceBundle.periodMess(key, language))
                 .build();
     }

@@ -21,6 +21,7 @@ import megalab.cinematica.utils.ResourceBundle;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -72,6 +73,11 @@ public class SessionServiceImpl extends BaseServiceImpl<Session, SessionRep, Ses
         }catch (UnsavedDataException e){
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
         }
+    }
+
+    @Override
+    public List<SessionDto> findByHallAndDate(Long hallId, LocalDate date, Long movieId) {
+        return mapper.toDtos(repo.findByHallAndDate(hallId, date, movieId), context);
     }
 
     private boolean areSessionsInSimilarHall(SessionCreateRequest request, Duration filmDuration, HallDto hallDto){

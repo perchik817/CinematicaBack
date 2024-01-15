@@ -11,6 +11,7 @@ import megalab.cinematica.models.dto.HallDto;
 import megalab.cinematica.models.dto.SeatsDto;
 import megalab.cinematica.models.entity.Seats;
 import megalab.cinematica.models.enums.Language;
+import megalab.cinematica.models.enums.SeatsStatus;
 import megalab.cinematica.models.requests.SeatsCreateRequest;
 import megalab.cinematica.models.responces.HallSeatsResponse;
 import megalab.cinematica.models.responces.Response;
@@ -60,9 +61,43 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
     public HallSeatsResponse getHallSeats(Long id, Language lan) {
         HallDto hall = hallService.findById(id, lan);
         HallSeatsResponse hallSeatsResponse = new HallSeatsResponse();
+
+        List<Integer> occupiedSeatsFromDB = repo.findOccupiedSeatsByHallIdAndStatus(id, SeatsStatus.OCCUPIED);
+
+        occupiedSeatsMap.put(id, occupiedSeatsFromDB);
+
         hallSeatsResponse.setSeatsCount(parseSeatIdsListString(hall.getSeatsCount()));
-        hallSeatsResponse.setOccupiedSeatsCount(occupiedSeatsMap.getOrDefault(id, new ArrayList<>()));
+        hallSeatsResponse.setOccupiedSeatsCount(occupiedSeatsFromDB);
+
         return hallSeatsResponse;
+    }
+
+    @Override
+    public Response removeSeat(Long hallId, int selectedSeat, Language language) {
+        try {
+            List<Integer> occupiedSeats = occupiedSeatsMap.getOrDefault(hallId, new ArrayList<>());
+            if (occupiedSeats.contains(selectedSeat)) {
+                occupiedSeats.remove(Integer.valueOf(selectedSeat));
+
+                SeatsDto seatsDto = findSeatByHallAndSeat(hallId, selectedSeat);
+                if (seatsDto != null) {
+                    seatsDto.setStatus(SeatsStatus.FREE);
+                    update(seatsDto);
+
+                    List<Integer> updatedOccupiedSeats = repo.findOccupiedSeatsByHallIdAndStatus(hallId, SeatsStatus.OCCUPIED);
+
+                    occupiedSeatsMap.put(hallId, updatedOccupiedSeats);
+
+                    return Response.getSuccessDelete("successDelete", language);
+                } else {
+                    throw new UnsavedDataException(ResourceBundle.periodMess("seatNotFound", language));
+                }
+            } else {
+                throw new PlaceIsOccupied(ResourceBundle.periodMess("placeIsNotOccupied", language));
+            }
+        } catch (UnsavedDataException e) {
+            throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
+        }
     }
 
     private boolean seatIsOccupied(int seat, Long hallId) {
@@ -70,7 +105,16 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
         return occupiedSeats.contains(seat);
     }
 
-    private static List<List<Integer>> parseSeatIdsListString(String seatIdsListString) {
+    private SeatsDto findSeatByHallAndSeat(Long hallId, int seat) {
+        return mapper.toDto(repo.findSeatByHallAndSeat(hallId, seat), context);
+    }
+
+    private void addOccupiedSeats(Long hallId, int selectedSeat) {
+        List<Integer> occupiedSeats = occupiedSeatsMap.computeIfAbsent(hallId, k -> new ArrayList<>());
+        occupiedSeats.add(selectedSeat);
+    }
+
+    private List<List<Integer>> parseSeatIdsListString(String seatIdsListString) {
         List<List<Integer>> seatIdsList = new ArrayList<>();
 
         if (seatIdsListString.trim().isEmpty()) return seatIdsList;
@@ -89,27 +133,6 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
             }
 
             seatIdsList.add(rowSeatIds);
-        }
-
-        return seatIdsList;
-    }
-
-    private void addOccupiedSeats(Long hallId, int selectedSeat) {
-        List<Integer> occupiedSeats = occupiedSeatsMap.computeIfAbsent(hallId, k -> new ArrayList<>());
-        if (!occupiedSeats.contains(selectedSeat)) {
-            occupiedSeats.add(selectedSeat);
-        }
-    }
-
-
-
-
-    private List<List<Integer>> removeSeat(List<List<Integer>> seatIdsList, int selectedSeat) {
-        for (List<Integer> row : seatIdsList) {
-            if (row.contains(selectedSeat)) {
-                row.remove(Integer.valueOf(selectedSeat));
-                break;
-            }
         }
 
         return seatIdsList;

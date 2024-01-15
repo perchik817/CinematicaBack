@@ -85,7 +85,7 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
 
 
     @Override
-    public FilmCinemasResponse getAllCinemasByFilm(Long movieId, Date date) {
+    public List<FilmCinemasResponse> getAllSessionsByFilm(Long movieId, Date date) {
         return null;
     }
 }

@@ -43,8 +43,6 @@ public class HallServiceImpl extends BaseServiceImpl<Hall, HallRep, HallDto, Hal
                     hallDto.setCinema(cinema);
                     String seatsCount = seatsCount(request.getSeatsCount(), request.getRowsCount());
                     hallDto.setSeatsCount(seatsCount);
-                    hallDto.setFreeSeatsCount(seatsCount);
-
                     save(hallDto);
 
                     return Response.getSuccessResponse(hallDto, lang);

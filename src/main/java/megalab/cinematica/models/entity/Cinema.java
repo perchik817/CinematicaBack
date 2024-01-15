@@ -18,7 +18,7 @@ import javax.persistence.*;
 @FieldDefaults (level = AccessLevel.PRIVATE)
 public class Cinema extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String logo;
     @Column(unique = true)

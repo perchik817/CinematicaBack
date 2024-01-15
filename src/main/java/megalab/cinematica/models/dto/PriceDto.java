@@ -11,7 +11,6 @@ import megalab.cinematica.models.enums.Ticket;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PriceDto extends BaseDto {
-    Long id;
     double price;
     Ticket type;
 }

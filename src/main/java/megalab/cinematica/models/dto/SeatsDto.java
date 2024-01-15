@@ -12,7 +12,6 @@ import megalab.cinematica.models.enums.SeatsStatus;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SeatsDto extends BaseDto {
-    Long id;
     int seat;
     SeatsStatus status;
     HallDto hall;

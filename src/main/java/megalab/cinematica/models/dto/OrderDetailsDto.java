@@ -10,7 +10,6 @@ import megalab.cinematica.base.BaseDto;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderDetailsDto extends BaseDto {
-    Long id;
     OrderDto order;
     SessionDto session;
     SeatsDto seats;

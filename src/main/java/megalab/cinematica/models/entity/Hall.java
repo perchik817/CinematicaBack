@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 public class Hall extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(name = "name", unique = true, nullable = false)
     String name;
@@ -24,6 +24,4 @@ public class Hall extends BaseEntity {
     Cinema cinema;
     @Column(nullable = false)
     String seatsCount;
-    @Column(nullable = false)
-    String freeSeatsCount;
 }

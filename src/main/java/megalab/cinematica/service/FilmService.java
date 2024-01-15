@@ -17,8 +17,7 @@ public interface FilmService extends BaseService<FilmDto> {
     String formatDuration(Duration duration, Language language);
     Duration parseDuration(String durationString);
 
-//    FilmsResponse getAllFilms(int limit, int offset);
     List<FilmsResponse> getAllFilms(int limit, int offset);
 
-    FilmCinemasResponse getAllCinemasByFilm(Long movieId, Date date);
+    List<FilmCinemasResponse> getAllSessionsByFilm(Long movieId, Date date);
 }

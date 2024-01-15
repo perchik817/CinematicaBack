@@ -11,5 +11,5 @@ import java.util.List;
 public class HallSeatsResponse {
     String name;
     List<List<Integer>> seatsCount;
-    List<List<Integer>> freeSeats;
+    List<Integer> occupiedSeatsCount;
 }

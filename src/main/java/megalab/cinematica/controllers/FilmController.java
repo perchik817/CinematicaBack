@@ -32,7 +32,7 @@ public class FilmController {
     @GetMapping("/get/cinemas/on/date")
     ResponseEntity<?> getAllCinemasByFilm(@RequestParam Long movieId,
                                   @RequestParam Date date){
-        return ResponseEntity.ok(filmService.getAllCinemasByFilm(movieId, date));
+        return ResponseEntity.ok(filmService.getAllSessionsByFilm(movieId, date));
     }
 
 }

@@ -12,7 +12,6 @@ import megalab.cinematica.base.BaseDto;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
 public class CinemaDto extends BaseDto {
-    Long id;
     String logo;
     String name;
     String definition;

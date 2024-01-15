@@ -13,9 +13,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
 public class HallDto extends BaseDto {
-    Long id;
     String name;
     CinemaDto cinema;
     String seatsCount;
-    String freeSeatsCount;
 }

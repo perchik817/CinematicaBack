@@ -37,7 +37,6 @@ public class OrderDetailsServiceImpl extends BaseServiceImpl<OrderDetails, Order
         this.seatsService = seatsService;
     }
 
-
     @Override
     public Response create(OrderDetailsCreateRequest request, Language lan) {
         try{
@@ -52,7 +51,7 @@ public class OrderDetailsServiceImpl extends BaseServiceImpl<OrderDetails, Order
             if (session.getDiscount() > 0)
                 request.setPrice(countPriceWithDisc(session.getPrice().getPrice(), session.getDiscount()));
             orderDetails.setPrice(request.getPrice());
-            orderDetails.setNum(request.getNum());
+            orderDetails.setNum(order.getNum());
             save(orderDetails);
             return Response.getSuccessResponse(orderDetails, lan);
         }catch (UnsavedDataException e){
@@ -61,7 +60,6 @@ public class OrderDetailsServiceImpl extends BaseServiceImpl<OrderDetails, Order
     }
 
     private double countPriceWithDisc(double price, double discount){
-        price *= discount / 0.01;
-        return price;
+        return price - price * discount / 100;
     }
 }

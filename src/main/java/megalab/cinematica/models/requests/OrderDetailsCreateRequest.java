@@ -17,5 +17,5 @@ public class OrderDetailsCreateRequest {
     Long sessionId;
     Long seatsId;
     double price;
-    int num;
+//    int num;
 }

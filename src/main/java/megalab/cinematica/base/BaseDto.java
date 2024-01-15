@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class BaseDto {
-
+    protected Long id;
     protected Date addDate;
     protected Date updateDate;
     protected boolean active;

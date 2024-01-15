@@ -28,6 +28,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, OrderRep, OrderDto,
         try{
             if(request.getTotalPrice() > 0) {
                 OrderDto orderDto = new OrderDto();
+
                 orderDto.setTotalPrice(request.getTotalPrice());
                 orderDto.setNum(request.getNum());
                 save(orderDto);

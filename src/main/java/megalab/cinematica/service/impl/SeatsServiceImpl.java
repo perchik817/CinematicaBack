@@ -6,6 +6,7 @@ import megalab.cinematica.exceptions.NumException;
 import megalab.cinematica.exceptions.PlaceIsOccupied;
 import megalab.cinematica.exceptions.UnsavedDataException;
 import megalab.cinematica.mappers.SeatsMapper;
+import megalab.cinematica.models.dto.CinemaDto;
 import megalab.cinematica.models.dto.HallDto;
 import megalab.cinematica.models.dto.SeatsDto;
 import megalab.cinematica.models.entity.Seats;
@@ -19,7 +20,9 @@ import megalab.cinematica.utils.ResourceBundle;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto, SeatsMapper>
@@ -29,43 +32,28 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
         this.hallService = hallService;
     }
     private final HallService hallService;
-
+    private final Map<Long, List<Integer>> occupiedSeatsMap = new HashMap<>();
     @Override
     public Response create(SeatsCreateRequest request, Language language) {
         try {
             HallDto hall = hallService.findById(request.getHallId(), language);
-            if(seatIsOccupied(request.getSeat())){
+            if (seatIsOccupied(request.getSeat(), hall.getId())) {
                 throw new PlaceIsOccupied(ResourceBundle.periodMess("placeIsOccupied", language));
-            }else {
+            } else {
                 if (request.getSeat() > 0) {
                     SeatsDto seatsDto = new SeatsDto();
                     seatsDto.setSeat(request.getSeat());
                     seatsDto.setHall(hall);
                     save(seatsDto);
-                    String freeSeatsCount = removeSeat(parseSeatIdsListString(hall.getSeatsCount()),
-                            request.getSeat()).toString();
-                    hall.setFreeSeatsCount(freeSeatsCount);
-                    hallService.update(hall);
-                    System.out.println(hall);
+                    addOccupiedSeats(hall.getId(), request.getSeat());
                     return Response.getSuccessResponse(seatsDto, language);
                 } else {
                     throw new NumException(ResourceBundle.periodMess("placeNumIsNegative", language));
                 }
             }
-        }catch (UnsavedDataException e){
+        } catch (UnsavedDataException e) {
             throw new UnsavedDataException(ResourceBundle.periodMess("unsavedData", language));
         }
-    }
-
-    private boolean seatIsOccupied(int seat){
-        List<SeatsDto> seats = findAll();
-        boolean occupied = false;
-        for (SeatsDto seatsDto : seats) {
-            if (seatsDto.getSeat() == seat){
-                occupied = true;
-            }
-        }
-        return occupied;
     }
 
     @Override
@@ -73,9 +61,13 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
         HallDto hall = hallService.findById(id, lan);
         HallSeatsResponse hallSeatsResponse = new HallSeatsResponse();
         hallSeatsResponse.setSeatsCount(parseSeatIdsListString(hall.getSeatsCount()));
-        hallSeatsResponse.setFreeSeats(parseSeatIdsListString(hall.getFreeSeatsCount()));
-
+        hallSeatsResponse.setOccupiedSeatsCount(occupiedSeatsMap.getOrDefault(id, new ArrayList<>()));
         return hallSeatsResponse;
+    }
+
+    private boolean seatIsOccupied(int seat, Long hallId) {
+        List<Integer> occupiedSeats = occupiedSeatsMap.getOrDefault(hallId, new ArrayList<>());
+        return occupiedSeats.contains(seat);
     }
 
     private static List<List<Integer>> parseSeatIdsListString(String seatIdsListString) {
@@ -102,8 +94,17 @@ public class SeatsServiceImpl extends BaseServiceImpl<Seats, SeatsRep, SeatsDto,
         return seatIdsList;
     }
 
+    private void addOccupiedSeats(Long hallId, int selectedSeat) {
+        List<Integer> occupiedSeats = occupiedSeatsMap.computeIfAbsent(hallId, k -> new ArrayList<>());
+        if (!occupiedSeats.contains(selectedSeat)) {
+            occupiedSeats.add(selectedSeat);
+        }
+    }
 
-    private static List<List<Integer>> removeSeat(List<List<Integer>> seatIdsList, int selectedSeat) {
+
+
+
+    private List<List<Integer>> removeSeat(List<List<Integer>> seatIdsList, int selectedSeat) {
         for (List<Integer> row : seatIdsList) {
             if (row.contains(selectedSeat)) {
                 row.remove(Integer.valueOf(selectedSeat));

@@ -20,7 +20,7 @@ import java.time.Duration;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Film extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
     String logo;

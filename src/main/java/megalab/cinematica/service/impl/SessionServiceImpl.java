@@ -75,10 +75,7 @@ public class SessionServiceImpl extends BaseServiceImpl<Session, SessionRep, Ses
         }
     }
 
-    @Override
-    public List<SessionDto> findByHallAndDate(Long hallId, LocalDate date, Long movieId) {
-        return mapper.toDtos(repo.findByHallAndDate(hallId, date, movieId), context);
-    }
+
 
     private boolean areSessionsInSimilarHall(SessionCreateRequest request, Duration filmDuration, HallDto hallDto){
         Date requestDateTime = request.getDateTime();

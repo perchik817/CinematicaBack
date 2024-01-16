@@ -28,7 +28,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, OrderRep, OrderDto,
         try{
             OrderDto orderDto = new OrderDto();
             orderDto.setNum(Math.toIntExact(orderDto.getId()));
-            orderDto.setTotalPrice(request.getTotalPrice());
+            orderDto.setTotalPrice(repo.findOrderDetailsByNum(orderDto.getNum()));
             save(orderDto);
             return Response.getSuccessResponse(orderDto, language);
         }catch (UnsavedDataException e){

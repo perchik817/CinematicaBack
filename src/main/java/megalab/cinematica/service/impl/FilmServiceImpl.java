@@ -7,6 +7,7 @@ import megalab.cinematica.exceptions.UnsavedDataException;
 import megalab.cinematica.mappers.CinemaMapper;
 import megalab.cinematica.mappers.FilmMapper;
 import megalab.cinematica.mappers.HallMapper;
+import megalab.cinematica.mappers.SessionMapper;
 import megalab.cinematica.microservices.FileServiceFeign;
 import megalab.cinematica.microservices.jsons.FileResponse;
 import megalab.cinematica.models.dto.CinemaDto;
@@ -18,8 +19,6 @@ import megalab.cinematica.models.enums.Language;
 import megalab.cinematica.models.requests.FilmCreateRequest;
 import megalab.cinematica.models.responces.*;
 import megalab.cinematica.service.FilmService;
-import megalab.cinematica.service.OrderDetailsService;
-import megalab.cinematica.service.SessionService;
 import megalab.cinematica.utils.ResourceBundle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,22 +28,22 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, FilmMapper> implements FilmService {
-
-    protected FilmServiceImpl(FilmRep filmRep, FilmMapper mapper, FileServiceFeign fileService, SessionService sessionService, HallMapper hallMapper, CinemaMapper cinemaMapper) {
+    protected FilmServiceImpl(FilmRep filmRep, FilmMapper mapper, FileServiceFeign fileService,
+                              SessionMapper sessionMapper, HallMapper hallMapper, CinemaMapper cinemaMapper) {
         super(filmRep, mapper);
         this.fileService = fileService;
-        this.sessionService = sessionService;
+        this.sessionMapper = sessionMapper;
         this.hallMapper = hallMapper;
         this.cinemaMapper = cinemaMapper;
     }
 
     private final FileServiceFeign fileService;
-    private final SessionService sessionService;
+
+    private final SessionMapper sessionMapper;
     private final HallMapper hallMapper;
     private final CinemaMapper cinemaMapper;
 
@@ -98,6 +97,10 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
     }
 
 
+    public List<SessionDto> findByHallAndDate(Long hallId, LocalDate date, Long movieId) {
+        return sessionMapper.toDtos(repo.findByHallAndDate(hallId, date, movieId), context);
+    }
+
     @Override
     public FilmSessionsResponse getAllSessionsByFilm(Long movieId, String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -115,7 +118,7 @@ public class FilmServiceImpl extends BaseServiceImpl<Film, FilmRep, FilmDto, Fil
             for(HallDto hallDto1: hallDto){
                 HallDetailsResponse hallDetails = new HallDetailsResponse();
                 hallDetails.setRoomMovieId(new ArrayList<>());
-                List<SessionDto> sessionDtos = sessionService.findByHallAndDate(hallDto1.getId(),
+                List<SessionDto> sessionDtos = findByHallAndDate(hallDto1.getId(),
                         LocalDate.parse(date, formatter), movieId);
 
                 hallDetails.setName(hallDto1.getName());

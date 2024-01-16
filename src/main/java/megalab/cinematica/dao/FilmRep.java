@@ -5,7 +5,7 @@ import megalab.cinematica.base.BaseRep;
 import megalab.cinematica.models.entity.Cinema;
 import megalab.cinematica.models.entity.Film;
 import megalab.cinematica.models.entity.Hall;
-import megalab.cinematica.models.responces.FilmSessionsResponse;
+import megalab.cinematica.models.entity.Session;
 import megalab.cinematica.models.responces.FilmsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,7 @@ public interface FilmRep extends BaseRep<Film> {
                 join tb_hall h on h.id_cinema = c.id
                 join tb_session s on s.id_hall = h.id
                 join tb_films f on f.id = s.id_films
-                where f.id = :movieId and s.date = :date
+                where f.id = :movieId and s.date_time = :date
             """, nativeQuery = true)
     List<Cinema> findByFilmAndDate(@Param("filmId") Long movieId,
                                    @Param("date") LocalDate date);
@@ -42,5 +42,14 @@ public interface FilmRep extends BaseRep<Film> {
                                    @Param("date") LocalDate date,
                                    @Param("movieId") Long movieId);
 
+    @Query("""
+            select distinct s from Session s
+            join Hall h on h.id = s.hall.id
+            join Film f on f.id = s.film.id
+            where h.id = :hallId and s.dateTime = :date and f.id = :movieId
+    """)
+    List<Session> findByHallAndDate(@Param("hallId") Long hallId,
+                                    @Param("date") LocalDate date,
+                                    @Param("filmId") Long movieId);
 
 }

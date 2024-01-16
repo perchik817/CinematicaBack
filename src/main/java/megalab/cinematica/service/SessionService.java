@@ -12,5 +12,5 @@ import java.util.List;
 public interface SessionService extends BaseService<SessionDto> {
     Response create(SessionCreateRequest request, Language language);
 
-    List<SessionDto> findByHallAndDate(Long hallId, LocalDate date, Long movieId);
+
 }
